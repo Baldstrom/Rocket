@@ -48,9 +48,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ALPHASim">
-      <HintPath>I:\GitHub\ALPHASim\ALPHASim\ALPHASim\bin\Debug\ALPHASim.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -84,6 +81,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ALPHASim\ALPHASim.csproj">
+      <Project>{58fc701b-cb4e-4c8a-89ba-fa41963dc6f5}</Project>
+      <Name>ALPHASim</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Control\Control.csproj">
       <Project>{74A64AD7-CFB7-46C8-A709-1474D5048306}</Project>
       <Name>Control</Name>
