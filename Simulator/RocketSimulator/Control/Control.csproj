@@ -53,5 +53,11 @@
     <Compile Include="SensorUpdate.cs" />
     <Compile Include="ThrustVectoring\TVCController.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ALPHASim\ALPHASim.csproj">
+      <Project>{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}</Project>
+      <Name>ALPHASim</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgParser.cs" />
     <Compile Include="Environment\Wind.cs" />
     <Compile Include="Parts\Rocket.cs" />
     <Compile Include="Parts\RocketMotor.cs" />

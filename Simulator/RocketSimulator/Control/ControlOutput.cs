@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ALPHASim.SimMath;
 
 namespace Control
 {
     public struct ControlOutput
     {
-
+        public Vector3D<double> Thrust;
+        public byte PyroOutputs;
     }
 }

@@ -9,6 +9,10 @@ namespace Control.FlightStatus
     public enum FlightState
     {
         ON_PAD,
+        LAUNCH,
+        ASCENT_PHASE,
+        DESCENT_PHASE,
+        ABORT,
         MISSION_ENDED,
     }
 }

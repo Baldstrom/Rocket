@@ -1,18 +1,37 @@
 ﻿using System;
 using Control.FlightStatus;
+using Control.PyroDischarge;
+using Control.ThrustVectoring;
 
 namespace Control
 {
     public class RocketController
     {
-        public ControlOutput Tick(SensorUpdate Values)
+        private PyroController pyroControl;
+        private TVCController tvcControl;
+        private FlightStatusController flightStatusController;
+
+        public RocketController()
         {
-            throw new NotImplementedException();
+            flightStatusController = new FlightStatusController();
+            tvcControl = new TVCController();
+            pyroControl = new PyroController(flightStatusController);
         }
 
-        public FlightState GetFlightStatus()
+        public ControlOutput Tick(SensorUpdate values)
         {
-            throw new NotImplementedException();
+            ControlOutput control = new ControlOutput();
+            FlightState state = flightStatusController.Tick(values);
+            control.Thrust = tvcControl.Tick(values, state);
+            control.PyroOutputs = pyroControl.Tick(values, state);
+
+            return control;
         }
+
+        public FlightState GetFlightStatus() { return flightStatusController.FlightStatus; }
+
+        public void Launch() { flightStatusController.RequestFlightStateChange(FlightState.LAUNCH); }
+        public void Abort() { flightStatusController.RequestFlightStateChange(FlightState.ABORT); }
     }
+
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Control.Sensors
 {
-    class Accelerometer
+    public class Accelerometer
     {
+        public double X, Y, Z;
     }
 }

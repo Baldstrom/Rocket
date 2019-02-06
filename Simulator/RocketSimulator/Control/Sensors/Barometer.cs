@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Control.Sensors
 {
-    class Barometer
+    public class Barometer
     {
+        public double Pressure;
     }
 }

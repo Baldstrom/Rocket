@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Control.Sensors
 {
-    class Gyro
+    public class Gyro
     {
+        public double X, Y, Z;
     }
 }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ALPHASim.SimMath;
+using Control.FlightStatus;
 
 namespace Control.ThrustVectoring
 {
     public class TVCController
     {
-
+        public Vector3D<double> Tick(SensorUpdate sensors, FlightState flightState)
+        {
+            return new Vector3D<double>();
+        }
     }
 }
