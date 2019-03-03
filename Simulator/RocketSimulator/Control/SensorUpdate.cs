@@ -8,8 +8,8 @@ namespace Control
 {
     public struct SensorUpdate
     {
-        public double AccelX, AccelY, AccelZ;
-        public double RotX, RotY, RotZ;
-        public double BarometricPressure;
+        public double AccelX, AccelY, AccelZ; // m/s/s
+        public double RotX, RotY, RotZ; // deg/s
+        public double BarometricPressure; // kPa
     }
 }
