@@ -12,11 +12,13 @@ namespace RocketSimulator.Parts
         public RocketConfiguration Config;
         public List<Surface> Surfaces { get; private set; }
 
+        private Vector3D<double> DragCoefficients;
+
         public struct RocketConfiguration
         {
-            public Vector3D<double> CenterOfMass { get; private set; }
-            public Vector3D<double> CenterOfThrust { get; private set; }
-            public Vector3D<double> CenterOfPressure { get; private set; }
+            public Vector3D<double> CenterOfMass { get; set; }
+            public Vector3D<double> CenterOfThrust { get; set; }
+            public Vector3D<double> CenterOfPressure { get; set; }
         }
 
         public Rocket(RocketConfiguration config)
@@ -25,9 +27,28 @@ namespace RocketSimulator.Parts
             this.Surfaces = new List<Surface>();
         }
 
-        public Rocket(RocketConfiguration config, List<Surface> surfaces) : this (config) { this.Surfaces = surfaces; }
+        public Rocket(RocketConfiguration config, List<Surface> surfaces) : this (config) 
+        { 
+            this.Surfaces = surfaces; 
+            GetDragCoefficients();
+        }
 
-        public void AddSurface(Surface newSurface) { Surfaces.Add(newSurface); }
+        public void AddSurface(Surface newSurface) 
+        { 
+            Surfaces.Add(newSurface); 
+            DragCoefficients.Add(newSurface.DragCoefficient);
+        }
+
+        public Vector3D<double> GetDragCoefficients() 
+        {
+            if (DragCoefficients == null) 
+            {
+                Vector3D<double> drag = new Vector3D<double>();
+                foreach (Surface surface in Surfaces) { drag.Add(surface.DragCoefficient); }
+                return drag;
+            }
+            else { return DragCoefficients; }
+        }
         
     }
 }

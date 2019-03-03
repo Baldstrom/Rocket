@@ -1,6 +1,7 @@
 ﻿using ALPHASim.SimMath;
 using Control;
 using Control.FlightStatus;
+using RocketSimulator.Parts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace RocketSimulator
 {
     public class Program
     {
+        private static Rocket simRocket;
+        private static RocketController rocket;
+        private static ControlOutput currentControl;
+        private static SensorUpdate sensorPackage;
+
         public static void Main(string[] args)
         {
             Run();
@@ -18,29 +24,47 @@ namespace RocketSimulator
 
         private static void Run()
         {
-            RocketController rocket = new RocketController();
-            ControlOutput currentControl = InitializeControlOutput();
-            SensorUpdate sensorPackage = InitialSensorReadings();
+            rocket = new RocketController();
+            simRocket = MakeRocket();
+            currentControl = InitializeControlOutput();
+            sensorPackage = InitialSensorReadings();
             while (rocket.GetFlightStatus() != FlightState.MISSION_ENDED)
             {
-                sensorPackage = GetDynamics(currentControl);
+                sensorPackage = GetDynamics();
                 currentControl = rocket.Tick(sensorPackage);
             }
         }
 
-        private static SensorUpdate GetDynamics(ControlOutput currentControl)
+        private static SensorUpdate GetDynamics()
         {
-            // Calculate Thrust Vector
-
-            // Calculate Aerodynamic Drag
-
+            SensorUpdate newSense = new SensorUpdate();
             // Calculate Acceleration Vectors
-
+            Vector3D<double> accel = new Vector3D<double>();
+            Vector3D<double> dragForce = new Vector3D<double>();
+            
+            accel = currentControl.Thrust - dragForce;
+            newSense.AccelX = accel.X;
+            newSense.AccelY = accel.Y;
+            newSense.AccelZ = accel.Z;
             // Calculate Gyro Vectors
-
+            newSense.RotX = 0;
+            newSense.RotY = 0;
+            newSense.RotZ = 0;
             // Calculate Barometric Pressure
+            newSense.BarometricPressure = sensorPackage.BarometricPressure + 0.1f;
+            return newSense;
+        }
 
-            return new SensorUpdate();
+        private static Rocket MakeRocket()
+        {
+            Rocket.RocketConfiguration config = new Rocket.RocketConfiguration() 
+            {
+                CenterOfMass = new Vector3D<double>     (0.0f, 0.0f, 0.0f),
+                CenterOfPressure = new Vector3D<double> (0.0f, 0.0f, 0.0f),
+                CenterOfThrust = new Vector3D<double>   (0.0f, 0.0f, 0.0f),
+            };
+            Rocket rocket = new Rocket(config);
+            return rocket;
         }
 
         private static ControlOutput InitializeControlOutput()
