@@ -12,6 +12,8 @@ namespace RocketSimulator
 {
     public class Program
     {
+        public const float FLIGHT_RESOLUTION = 1.0f; // seconds / tick
+
         private static Rocket simRocket;
         private static RocketController rocket;
         private static ControlOutput currentControl;
