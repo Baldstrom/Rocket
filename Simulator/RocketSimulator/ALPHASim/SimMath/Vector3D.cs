@@ -34,11 +34,23 @@ namespace ALPHASim.SimMath
             this.Z = Z;
         }
 
+        public Vector3D(T A) : base()
+        {
+            this.X = A;
+            this.Y = A;
+            this.Z = A;
+        }
+
         public void Set(T X, T Y, T Z)
         {
             this.X = X;
             this.Y = Y;
             this.Z = Z;
+        }
+
+        public Vector3D<T> Multiply(T scalar)
+        {
+            return this * new Vector3D<T>(scalar);
         }
 
         public Vector3D<T> Multiply(Vector3D<T> other)

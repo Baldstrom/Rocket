@@ -12,22 +12,25 @@ namespace RocketSimulator
 {
     public class Program
     {
-        public const float FLIGHT_RESOLUTION = 1.0f; // seconds / tick
+        public delegate Rocket MakeRocket();
 
         private static Rocket simRocket;
         private static RocketController rocket;
         private static ControlOutput currentControl;
         private static SensorUpdate sensorPackage;
+        private static MakeRocket rocketCreation;
 
         public static void Main(string[] args)
         {
+            rocketCreation = DefaultMakeRocket;
             Run();
         }
 
         private static void Run()
         {
             rocket = new RocketController();
-            simRocket = MakeRocket();
+            DefaultMakeRocket();
+            simRocket = rocketCreation();
             currentControl = InitializeControlOutput();
             sensorPackage = InitialSensorReadings();
             while (rocket.GetFlightStatus() != FlightState.MISSION_ENDED)
@@ -40,24 +43,32 @@ namespace RocketSimulator
         private static SensorUpdate GetDynamics()
         {
             SensorUpdate newSense = new SensorUpdate();
+
             // Calculate Acceleration Vectors
             Vector3D<double> accel = new Vector3D<double>();
+            Vector3D<double> velocity = new Vector3D<double>();
             Vector3D<double> dragForce = new Vector3D<double>();
+            // Compute drag force
+            velocity = accel.Multiply(Time.FLIGHT_RESOLUTION);
+            // dragForce = Cd * p * v^2 / 2 * A
             
+            // Set new acceleration vectors
             accel = currentControl.Thrust - dragForce;
             newSense.AccelX = accel.X;
             newSense.AccelY = accel.Y;
             newSense.AccelZ = accel.Z;
-            // Calculate Gyro Vectors
+
+            // Calculate Gyro Vectors (no need for this right now)
             newSense.RotX = 0;
             newSense.RotY = 0;
             newSense.RotZ = 0;
-            // Calculate Barometric Pressure
+            
+            // Calculate Barometric Pressure (deltaH?)
             newSense.BarometricPressure = sensorPackage.BarometricPressure + 0.1f;
             return newSense;
         }
 
-        private static Rocket MakeRocket()
+        private static Rocket DefaultMakeRocket()
         {
             Rocket.RocketConfiguration config = new Rocket.RocketConfiguration() 
             {
@@ -71,9 +82,11 @@ namespace RocketSimulator
 
         private static ControlOutput InitializeControlOutput()
         {
-            ControlOutput initialControl = new ControlOutput();
-            initialControl.Thrust = new Vector3D<double>(0, 0, 0);
-            initialControl.PyroOutputs = 0x00;
+            ControlOutput initialControl = new ControlOutput
+            {
+                Thrust = new Vector3D<double>(0, 0, 0),
+                PyroOutputs = 0x00
+            };
             return initialControl;
         }
 
