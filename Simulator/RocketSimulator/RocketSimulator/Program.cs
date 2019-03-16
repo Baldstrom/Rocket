@@ -51,7 +51,10 @@ namespace RocketSimulator
             // Compute drag force
             velocity = accel.Multiply(Time.FLIGHT_RESOLUTION);
             // dragForce = Cd * p * v^2 / 2 * A
-            
+            dragForce = simRocket.GetDragCoefficients().Multiply(sensorPackage.BarometricPressure);
+            dragForce = dragForce * velocity * velocity * simRocket.GetSurfaceAreas();
+            dragForce = dragForce.Divide(2);
+
             // Set new acceleration vectors
             accel = currentControl.Thrust - dragForce;
             newSense.AccelX = accel.X;

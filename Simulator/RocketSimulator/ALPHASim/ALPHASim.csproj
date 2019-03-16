@@ -61,6 +61,7 @@
     <Compile Include="Utility\Constants.cs" />
     <Compile Include="Utility\DataMethods.cs" />
     <Compile Include="Utility\LogCSV.cs" />
+    <Compile Include="Utility\UnitConversions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

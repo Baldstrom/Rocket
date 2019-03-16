@@ -12,6 +12,7 @@ namespace RocketSimulator.Parts
         public RocketConfiguration Config;
         public List<Surface> Surfaces { get; private set; }
 
+        private Vector3D<double> SurfaceArea;
         private Vector3D<double> DragCoefficients;
 
         public struct RocketConfiguration
@@ -39,12 +40,24 @@ namespace RocketSimulator.Parts
             DragCoefficients.Add(newSurface.DragCoefficient);
         }
 
+        public Vector3D<double> GetSurfaceAreas()
+        {
+            if (SurfaceArea == null)
+            {
+                Vector3D<double> surfaceArea = new Vector3D<double>();
+                foreach(Surface surface in Surfaces) { surfaceArea.Add(surface.SurfaceArea); }
+                SurfaceArea = surfaceArea;
+                return surfaceArea;
+            } else { return SurfaceArea; }
+        }
+
         public Vector3D<double> GetDragCoefficients() 
         {
             if (DragCoefficients == null) 
             {
                 Vector3D<double> drag = new Vector3D<double>();
                 foreach (Surface surface in Surfaces) { drag.Add(surface.DragCoefficient); }
+                DragCoefficients = drag;
                 return drag;
             }
             else { return DragCoefficients; }

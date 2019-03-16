@@ -61,6 +61,11 @@ namespace ALPHASim.SimMath
             return new Vector3D<T>((T)nX, (T)nY, (T)nZ);
         }
 
+        public Vector3D<T> Divide(T scalar)
+        {
+            return this / new Vector3D<T>(scalar);
+        }
+
         public Vector3D<T> Divide(Vector3D<T> other)
         {
             dynamic nX = this.Xd / other.X;

@@ -52,6 +52,7 @@
     <Compile Include="Sensors\Gyro.cs" />
     <Compile Include="SensorUpdate.cs" />
     <Compile Include="ThrustVectoring\TVCController.cs" />
+    <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALPHASim\ALPHASim.csproj">
