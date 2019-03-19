@@ -10,7 +10,9 @@ namespace RocketSimulator
     public class STLExtractor
     {
         // Max length of an STL header
-        public const int STL_HEADER_LENGTH = 80;
+        public const int STL_BIN_HEADER_LENGTH = 80;
+        public const int STL_BIN_FACET_LENGTH = 50;
+        public const int STL_BIN_NUM_FACET_LENGTH = 4;
 
         public bool IsValid { get; private set; }
         public FileValidity ValidState { get; private set; }
@@ -39,7 +41,10 @@ namespace RocketSimulator
 
         public Rocket RocketFromSTL()
         {
-            if (!IsValid) { throw new InvalidOperationException("Cannot make rocket from invalid STL file. Check file validity and try again."); }
+            if (!IsValid)
+            {
+                throw new InvalidOperationException("Cannot make rocket from invalid STL file. Check file validity and try again.");
+            }
             
             // Set configuration
             RocketConfiguration config = new RocketConfiguration()
@@ -49,7 +54,7 @@ namespace RocketSimulator
                 CenterOfThrust = new Vector3D<double>(),
             };
             // Set surfaces
-            List<Surface> surfaces = new List<Surface>();
+            List<Surface> surfaces = STL.Surfaces;
 
             return new Rocket(config, surfaces);
         }
@@ -88,43 +93,45 @@ namespace RocketSimulator
         {
             public string Name;
             public StlType Type;
-            public StlUnits units;
+            public StlUnits Units;
 
             public List<Surface> Surfaces;
 
+            private FileStream fileStream;
             private StreamReader reader;
             private long NumFacets;
 
             public STLFile(FileStream fileStream, StlUnits units)
             {
                 // Set vars
-                this.units = units;
+                Units = units;
+                this.fileStream = fileStream;
                 reader = new StreamReader(fileStream);
 
                 // Determine type and name of STL
-                GetTypeAndName(fileStream);
+                GetTypeAndName();
                 // Correct reader now at end of header element
 
                 // Get vertices, surface normal vectors, triangles
-                // I.E. GetSurfaces
+                // I.E. Get Surfaces
                 GetSurfaces();
             }
 
-            public void GetTypeAndName(FileStream file)
+            private void GetTypeAndName()
             {
                 // Read 80 bytes or until "solid"
-                char[] header = new char[STL_HEADER_LENGTH];
+                char[] header = new char[STL_BIN_HEADER_LENGTH];
                 string solid = "solid ";
                 int lookIndex = 0;
                 char lookingFor = solid[lookIndex];
-                char lookingAt = (char)file.ReadByte();
+                char lookingAt = (char)fileStream.ReadByte();
                 bool FileIsASCII = false;
                 while (lookingFor == lookingAt)
                 {
                     if (lookIndex == solid.Length) { FileIsASCII = true; }
                     // Set loop characteristics
                     lookIndex++;
-                    lookingAt = (char)file.ReadByte();
+                    lookingAt = (char)fileStream.ReadByte();
                     header[lookIndex] = lookingAt;
                     lookingFor = solid[lookIndex];
                 }
@@ -141,24 +148,122 @@ namespace RocketSimulator
                     // Read the rest of the header, call that the name
                     for (int i = lookIndex; i < header.Length; i++)
                     {
-                        header[i] = (char)file.ReadByte();
+                        header[i] = (char)fileStream.ReadByte();
                     }
                     Name = header.ToString();
                     Type = StlType.Binary;
                 }
             }
 
-            public void GetSurfaces()
+            private void GetSurfaces()
             {
-                // Get number of facets
-                // Add to surfaces the surface
+                if (this.Type == StlType.ASCII) { GetASCIISurfaces(); }
+                else { GetBinarySurfaces(); }
             }
-            
+
+            private void GetASCIISurfaces()
+            {
+                string nextLine = ReadNextASCIILine();
+                Vector3D<double> normal = new Vector3D<double>();
+                Vector3D<double> curVertex = new Vector3D<double>();
+                float[] xyz = new float[3];
+                string[] str;
+                int curXYZ = 0;
+                int numVerticesAdded = 0;
+                bool started = false;
+                Surface surface = new Surface();
+                while (nextLine != string.Empty && !nextLine.Contains("endsolid"))
+                {
+                    if (numVerticesAdded == 0)
+                    {
+                        if (started) { Surfaces.Add(surface); }
+                        else { started = true; }
+                        surface = new Surface();
+                    }
+
+                    str = nextLine.Split(' ', '\t');
+                    curXYZ = 0;
+                    foreach(string s in str)
+                    {
+                        if (float.TryParse(s, out xyz[curXYZ])) { curXYZ++; }
+                    }
+                    if (nextLine.Contains("facet normal"))
+                    {
+                        normal.X = xyz[0];
+                        normal.X = xyz[1];
+                        normal.X = xyz[2];
+                        surface.SetNormal(normal);
+                    }
+                    else if (nextLine.Contains("vertex"))
+                    {
+                        curVertex.X = xyz[0];
+                        curVertex.Y = xyz[1];
+                        curVertex.Z = xyz[2];
+
+                        surface.AddVertex(curVertex);
+
+                        numVerticesAdded++;
+                        numVerticesAdded %= 4;
+                    }
+                    // Next Line
+                    nextLine = ReadNextASCIILine();
+                }
+            }
+
+            private void GetBinarySurfaces()
+            {
+                byte[] numFacets = new byte[STL_BIN_NUM_FACET_LENGTH];
+                fileStream.Read(numFacets, 0, numFacets.Length);
+                NumFacets = BitConverter.ToInt64(numFacets, 0);
+                byte[] facet = new byte[STL_BIN_FACET_LENGTH];
+                List<Vector3D<float>> vertices = new List<Vector3D<float>>();
+                Vector3D<double> normal = new Vector3D<double>();
+                Vector3D<double> vX = new Vector3D<double>();
+                Vector3D<double> vY = new Vector3D<double>();
+                Vector3D<double> vZ = new Vector3D<double>();
+                for (long i = 0; i < NumFacets; i++)
+                {
+                    fileStream.Read(facet, 0, STL_BIN_FACET_LENGTH);
+                    // Normal
+                    normal.X = BitConverter.ToSingle(facet, 0);
+                    normal.Y = BitConverter.ToSingle(facet, 4);
+                    normal.Z = BitConverter.ToSingle(facet, 8);
+                    // X
+                    vX.X = BitConverter.ToSingle(facet, 12);
+                    vX.Y = BitConverter.ToSingle(facet, 16);
+                    vX.Z = BitConverter.ToSingle(facet, 20);
+                    // Y
+                    vY.X = BitConverter.ToSingle(facet, 24);
+                    vY.Y = BitConverter.ToSingle(facet, 28);
+                    vY.Z = BitConverter.ToSingle(facet, 32);
+                    // Z
+                    vZ.X = BitConverter.ToSingle(facet, 36);
+                    vZ.Y = BitConverter.ToSingle(facet, 40);
+                    vZ.Z = BitConverter.ToSingle(facet, 44);
+                    // Byte Count (ignored, 2 bytes)
+
+                    // Set surface
+                    Surface surface = new Surface();
+
+                    surface.SetNormal(normal);
+                    surface.AddVertex(vX);
+                    surface.AddVertex(vY);
+                    surface.AddVertex(vZ);
+                }
+            }
+
+            private string ReadNextASCIILine()
+            {
+                try { return reader.ReadLine(); }
+                catch (IOException) { throw new IOException("Could not read ASCII STL."); }
+            }
+
             public enum StlType
             {
                 Binary,
                 ASCII
             }
+
         }
 
     }

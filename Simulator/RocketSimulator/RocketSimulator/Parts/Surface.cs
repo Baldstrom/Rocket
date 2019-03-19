@@ -22,6 +22,11 @@ namespace RocketSimulator.Parts
             this.DragCoefficient = dragCoefficient;
         }
 
+        public Surface()
+        {
+
+        }
+
         public void SetDragCoefficients(Vector3D<double> drag) { this.DragCoefficient = drag; }
         public void SetSurfaceArea(Vector3D<double> surfaceArea) { this.SurfaceArea = surfaceArea; }
         public void SetPosition(Vector3D<double> position) { this.Position = position; }

@@ -15,9 +15,9 @@ namespace ALPHASim.SimMath
 
         #region Public Members
 
-        public T X { get; private set; }
-        public T Y { get; private set; }
-        public T Z { get; private set; }
+        public T X { get; set; }
+        public T Y { get; set; }
+        public T Z { get; set; }
 
         #endregion
 
