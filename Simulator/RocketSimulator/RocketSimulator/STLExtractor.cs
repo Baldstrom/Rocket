@@ -151,7 +151,7 @@ namespace RocketSimulator
             public void GetSurfaces()
             {
                 // Get number of facets
-
+                // Add to surfaces the surface
             }
             
             public enum StlType

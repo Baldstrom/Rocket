@@ -23,6 +23,8 @@ namespace RocketSimulator
 
     public enum ActionType
     {
+        LoadStl,
+        PrintCSVs,
 
     }
 }

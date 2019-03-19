@@ -17,10 +17,16 @@ namespace RocketSimulator.Parts
 
         public Surface(Vector3D<double> area, Vector3D<double> dragCoefficient)
         {
+            this.Vertices = new List<Vector3D<double>>();
             this.SurfaceArea = area;
             this.DragCoefficient = dragCoefficient;
         }
 
         public void SetDragCoefficients(Vector3D<double> drag) { this.DragCoefficient = drag; }
+        public void SetSurfaceArea(Vector3D<double> surfaceArea) { this.SurfaceArea = surfaceArea; }
+        public void SetPosition(Vector3D<double> position) { this.Position = position; }
+        public void AddVertex(Vector3D<double> vertex) { this.Vertices.Add(vertex); }
+        public void SetNormal(Vector3D<double> normal) { this.Normal = normal; }
+
     }
 }
