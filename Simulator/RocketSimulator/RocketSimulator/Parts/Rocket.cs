@@ -40,6 +40,16 @@ namespace RocketSimulator.Parts
             DragCoefficients.Add(newSurface.DragCoefficient);
         }
 
+        public List<Surface> GetVisibleSurfacesFromOrientation(Vector3D<double> orientation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double GetVisibleSurfaceAreaFromOrientation(Vector3D<double> orientation)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector3D<double> GetSurfaceAreas()
         {
             if (SurfaceArea == null)
