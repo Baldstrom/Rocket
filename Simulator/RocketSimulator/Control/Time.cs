@@ -9,13 +9,26 @@ namespace Control
     public class Time
     {
         public const float DEFAULT_FLIGHT_RESOLUTION = 1.0f;
-        public static float FLIGHT_RESOLUTION; // seconds / tick
-
-        static Time()
+        public static float FLIGHT_RESOLUTION // seconds / tick
         {
-            if (FLIGHT_RESOLUTION <= 0.0f) { FLIGHT_RESOLUTION = DEFAULT_FLIGHT_RESOLUTION; }
-        }
+            get
+            {
+                if (RES_SET) { return nF_RES; }
+                else { return DEFAULT_FLIGHT_RESOLUTION;  }
+            }
+            set
+            {
+                if (CheckNewRes(value))
+                {
+                    nF_RES = value;
+                    RES_SET = true;
+                }
+            }
+        } 
 
-        public static void SetResolution(float newResolution) { FLIGHT_RESOLUTION = newResolution; }
+        private static float nF_RES;
+        private static bool RES_SET;
+
+        private static bool CheckNewRes(float newResolution) { return newResolution > 0.0f; }
     }
 }
