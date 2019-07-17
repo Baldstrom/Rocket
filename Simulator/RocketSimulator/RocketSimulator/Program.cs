@@ -23,6 +23,9 @@ namespace RocketSimulator
         public static void Main(string[] args)
         {
             rocketCreation = DefaultMakeRocket;
+            List<Action> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
+            Logging.Print(argErrors, Logging.PrintType.ERROR);
+            Logging.Print(argWarnings, Logging.PrintType.WARNING);
             Run();
         }
 
@@ -106,5 +109,6 @@ namespace RocketSimulator
                 BarometricPressure = 101.325, // kPa
             };
         }
+
     }
 }
