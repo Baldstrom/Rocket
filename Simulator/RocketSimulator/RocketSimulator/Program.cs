@@ -55,7 +55,8 @@ namespace RocketSimulator
             velocity = accel.Multiply(Time.FLIGHT_RESOLUTION);
             // dragForce = Cd * p * v^2 / 2 * A
             dragForce = simRocket.GetDragCoefficients().Multiply(sensorPackage.BarometricPressure);
-            dragForce = dragForce * velocity * velocity * simRocket.GetSurfaceAreas();
+            // RAY TRACING FOR DRAG ??? 
+            dragForce = dragForce * velocity * velocity;// * simRocket.GetSurfaceAreas(); <-- Need to find a way to do this...
             dragForce = dragForce.Divide(2);
 
             // Set new acceleration vectors
