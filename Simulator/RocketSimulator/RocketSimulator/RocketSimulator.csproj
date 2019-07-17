@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ArgParser.cs" />
     <Compile Include="Environment\Wind.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="Parts\Rocket.cs" />
     <Compile Include="Parts\RocketMotor.cs" />
     <Compile Include="Parts\Surface.cs" />
