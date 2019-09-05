@@ -26,6 +26,23 @@ namespace RocketSimulator
             List<Action> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
             Logging.Print(argErrors, Logging.PrintType.ERROR);
             Logging.Print(argWarnings, Logging.PrintType.WARNING);
+            foreach(Action argParseAction in argParseActions)
+            {
+                // Do actions
+                switch(argParseAction.act)
+                {
+                    case ActionType.PrintCSVs:
+                        SetupCSV();
+                        break;
+                    case ActionType.TimeScale:
+                        Time.FLIGHT_RESOLUTION = (float)argParseAction.actionValue;
+                        break;
+                    case ActionType.LoadStl:
+                        
+                    default:
+                        break;
+                }
+            }
             Run();
         }
 
@@ -110,6 +127,14 @@ namespace RocketSimulator
                 BarometricPressure = 101.325, // kPa
             };
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void SetupCSV()
+        {
 
+        }
+        
     }
 }
