@@ -51,7 +51,6 @@ namespace RocketSimulator
                             if (NumActionTypeInList(actionList, ActionType.LoadStl) == 0)
                             {
                                 // Create STL action and add to actionList
-                                Action newAction;
                                 string filePath = arguments[i + 1];
                                 if (File.Exists(filePath))
                                 {
