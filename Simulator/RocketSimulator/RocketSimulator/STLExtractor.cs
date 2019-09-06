@@ -191,13 +191,13 @@ namespace RocketSimulator
                 Surface surface = new Surface();
                 while (nextLine != string.Empty && !nextLine.Contains("endsolid"))
                 {
-                    if (numVerticesAdded == 0)
+                    if (numVerticesAdded == 3)
                     {
                         if (started) { Surfaces.Add(surface); }
                         else { started = true; }
+                        numVerticesAdded = 0;
                         surface = new Surface();
                     }
-
                     str = nextLine.Split(' ', '\t');
                     curXYZ = 0;
                     foreach(string s in str)
@@ -207,8 +207,8 @@ namespace RocketSimulator
                     if (nextLine.Contains("facet normal"))
                     {
                         normal.X = xyz[0];
-                        normal.X = xyz[1];
-                        normal.X = xyz[2];
+                        normal.Y = xyz[1];
+                        normal.Z = xyz[2];
                         surface.SetNormal(normal);
                     }
                     else if (nextLine.Contains("vertex"))
@@ -220,7 +220,6 @@ namespace RocketSimulator
                         surface.AddVertex(curVertex);
 
                         numVerticesAdded++;
-                        numVerticesAdded %= 4;
                     }
                     // Next Line
                     nextLine = ReadNextASCIILine();
@@ -237,7 +236,7 @@ namespace RocketSimulator
                 // Facets count is little endian
                 if (!BitConverter.IsLittleEndian)
                 {
-                    // Transpose bytes into big endian
+                    // TODO: Transpose bytes into big endian
                 }
 
                 NumFacets = BitConverter.ToInt64(numFacets, 0);
@@ -251,7 +250,7 @@ namespace RocketSimulator
                     fileStream.Read(facet, 0, STL_BIN_FACET_LENGTH);
                     if (!BitConverter.IsLittleEndian)
                     {
-                        // Transpose to big endian
+                        // TODO: Transpose to big endian
                     }
 
                     // Normal
