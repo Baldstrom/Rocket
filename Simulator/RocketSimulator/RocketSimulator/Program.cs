@@ -41,10 +41,10 @@ namespace RocketSimulator
                             break;
                         case ActionType.LoadStl:
                             STLExtractor primarySTL = new STLExtractor((string)argParseAction.actionValue);
-                            if (primarySTL.IsValid)
-                            {
-                                simRocket = primarySTL.RocketFromSTL();
-                            }
+                            if (primarySTL.IsValid) { simRocket = primarySTL.RocketFromSTL(); }
+                            break;
+                        case ActionType.ArgDebug:
+                            PrintArgs(argParseActions);
                             break;
                         default:
                             break;
@@ -143,6 +143,16 @@ namespace RocketSimulator
         private static void SetupCSV()
         {
 
+        }
+
+        private static void PrintArgs(List<Action> argActions)
+        {
+            // TODO: Implement debugging arguments
+            foreach (Action act in argActions)
+            {
+
+            }
+            Logging.Print("ACTION DBG PRINT");
         }
         
     }

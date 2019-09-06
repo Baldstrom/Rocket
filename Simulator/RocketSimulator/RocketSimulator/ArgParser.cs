@@ -22,6 +22,14 @@ namespace RocketSimulator
                 {
                     switch(arg.Substring(1))
                     {
+                        case "a":
+                        case "argDbg":
+                            // Expect no parameters
+                            if (NumActionTypeInList(actionList, ActionType.ArgDebug) == 0)
+                            {
+                                actionList.Add(new Action(ActionType.ArgDebug));
+                            }
+                            break;
                         case "t":
                         case "timescale":
                             // Expect 1 double
@@ -33,8 +41,7 @@ namespace RocketSimulator
                                 // Create new timescale action
                                 ActionType thisActType = ActionType.TimeScale;
                                 Type thisActValueType = typeof(float);
-                                float thisActValue;
-                                bool success = float.TryParse(arguments[i + 1], out thisActValue);
+                                bool success = float.TryParse(arguments[i + 1], out float thisActValue);
                                 if (success) { actionList.Add(new Action(thisActType, thisActValue, thisActValueType)); }
                                 else { warn.Add("WARNING: COULD NOT PARSE TIMESCALE ARGUMENT AS FLOAINNG POINT VALUE."); }
                             }
@@ -145,6 +152,7 @@ namespace RocketSimulator
         LoadStl,
         PrintCSVs,
         TimeScale,
+        ArgDebug,
 
     }
 }
