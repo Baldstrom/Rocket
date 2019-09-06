@@ -26,24 +26,33 @@ namespace RocketSimulator
             List<Action> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
             Logging.Print(argErrors, Logging.PrintType.ERROR);
             Logging.Print(argWarnings, Logging.PrintType.WARNING);
-            foreach(Action argParseAction in argParseActions)
+            if (argErrors.Count() == 0)
             {
-                // Do actions
-                switch(argParseAction.act)
+                foreach (Action argParseAction in argParseActions)
                 {
-                    case ActionType.PrintCSVs:
-                        SetupCSV();
-                        break;
-                    case ActionType.TimeScale:
-                        Time.FLIGHT_RESOLUTION = (float)argParseAction.actionValue;
-                        break;
-                    case ActionType.LoadStl:
-                        
-                    default:
-                        break;
+                    // Do actions
+                    switch (argParseAction.act)
+                    {
+                        case ActionType.PrintCSVs:
+                            SetupCSV();
+                            break;
+                        case ActionType.TimeScale:
+                            Time.FLIGHT_RESOLUTION = (float)argParseAction.actionValue;
+                            break;
+                        case ActionType.LoadStl:
+                            STLExtractor primarySTL = new STLExtractor((string)argParseAction.actionValue);
+                            if (primarySTL.IsValid)
+                            {
+                                simRocket = primarySTL.RocketFromSTL();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                Run();
             }
-            Run();
+            Logging.Close();
         }
 
         private static void Run()

@@ -14,17 +14,21 @@ namespace RocketSimulator.Parts
         public Vector3D<double> Position { get; private set; }
         public List<Vector3D<double>> Vertices { get; private set; }
         public Vector3D<double> Normal { get; private set; }
+        public bool IsExterior { get; set; }
 
-        public Surface(Vector3D<double> area, Vector3D<double> dragCoefficient)
+        public Surface(Vector3D<double> area, Vector3D<double> dragCoefficient) : this()
         {
-            this.Vertices = new List<Vector3D<double>>();
             this.SurfaceArea = area;
             this.DragCoefficient = dragCoefficient;
         }
 
         public Surface()
         {
-
+            this.Vertices = new List<Vector3D<double>>();
+            this.DragCoefficient = new Vector3D<double>();
+            this.Position = new Vector3D<double>();
+            this.Normal = new Vector3D<double>();
+            this.SurfaceArea = new Vector3D<double>();
         }
 
         public void SetDragCoefficients(Vector3D<double> drag) { this.DragCoefficient = drag; }

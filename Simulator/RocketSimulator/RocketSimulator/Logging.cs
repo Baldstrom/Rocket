@@ -16,6 +16,7 @@ namespace RocketSimulator
         }
 
         private static PrintType CurrentConsoleConditions;
+        private static ConsoleColor DefaultConsoleColor;
 
         #region CSV Fields
         public static bool IsCSVSetup { get; private set; }
@@ -51,7 +52,7 @@ namespace RocketSimulator
 
         public static void Print(string[] list, PrintType type = PrintType.NORMAL)
         {
-            if (CurrentConsoleConditions != type)
+            if (list.Count() > 0 && CurrentConsoleConditions != type)
             {
                 switch(type)
                 {
@@ -92,20 +93,30 @@ namespace RocketSimulator
 
         private static void SetConsoleNormal()
         {
-
+            Console.ForegroundColor = DefaultConsoleColor;
             CurrentConsoleConditions = PrintType.NORMAL;
         }
 
         private static void SetConsoleWarning()
         {
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
             CurrentConsoleConditions = PrintType.WARNING;
         }
 
         private static void SetConsoleError()
         {
-
+            Console.ForegroundColor = ConsoleColor.Red;
             CurrentConsoleConditions = PrintType.ERROR;
+        }
+
+        static Logging()
+        {
+            DefaultConsoleColor = Console.ForegroundColor;
+        }
+
+        public static void Close()
+        {
+            SetConsoleNormal();
         }
     }
 }

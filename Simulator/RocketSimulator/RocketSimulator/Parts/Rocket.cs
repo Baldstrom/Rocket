@@ -11,6 +11,7 @@ namespace RocketSimulator.Parts
     {
         public RocketConfiguration Config;
         public List<Surface> Surfaces { get; private set; }
+        public List<Surface> ExteriorSurfaces { get; private set; }
 
         private Vector3D<double> DragCoefficients;
 
@@ -30,12 +31,20 @@ namespace RocketSimulator.Parts
         public Rocket(RocketConfiguration config, List<Surface> surfaces) : this (config) 
         { 
             this.Surfaces = surfaces; 
+            foreach (Surface surface in this.Surfaces)
+            {
+                if (surface.IsExterior)
+                {
+                    ExteriorSurfaces.Add(surface);
+                }
+            }
             GetDragCoefficients();
         }
 
         public void AddSurface(Surface newSurface) 
         { 
             Surfaces.Add(newSurface); 
+            if (newSurface.IsExterior) { ExteriorSurfaces.Add(newSurface); }
             DragCoefficients.Add(newSurface.DragCoefficient);
         }
 

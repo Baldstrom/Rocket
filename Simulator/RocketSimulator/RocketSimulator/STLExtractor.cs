@@ -12,7 +12,7 @@ namespace RocketSimulator
         // Max length of an STL header
         public const int STL_BIN_HEADER_LENGTH = 80;
         public const int STL_BIN_FACET_LENGTH = 50;
-        public const int STL_BIN_NUM_FACET_LENGTH = 4;
+        public const int STL_BIN_NUM_FACET_LENGTH = 8;
 
         public bool IsValid { get; private set; }
         public FileValidity ValidState { get; private set; }
@@ -104,6 +104,7 @@ namespace RocketSimulator
             public STLFile(FileStream fileStream, StlUnits units)
             {
                 // Set vars
+                Surfaces = new List<Surface>();
                 Units = units;
                 this.fileStream = fileStream;
                 reader = new StreamReader(fileStream);
@@ -157,8 +158,17 @@ namespace RocketSimulator
 
             private void GetSurfaces()
             {
+                Logging.Print("DECODING STL FILE...");
                 if (this.Type == StlType.ASCII) { GetASCIISurfaces(); }
                 else { GetBinarySurfaces(); }
+                DetermineExteriorSurfaces();
+            }
+
+            private void DetermineExteriorSurfaces()
+            {
+                Logging.Print("ANALYZING STL FILE...");
+
+                Logging.Print("FINISHED STL ANALYSIS.");
             }
 
             private void GetASCIISurfaces()
@@ -213,10 +223,18 @@ namespace RocketSimulator
             private void GetBinarySurfaces()
             {
                 byte[] numFacets = new byte[STL_BIN_NUM_FACET_LENGTH];
-                fileStream.Read(numFacets, 0, numFacets.Length);
+                // Skip header
+                fileStream.Seek(STL_BIN_HEADER_LENGTH, SeekOrigin.Begin);
+                // Read facets
+                fileStream.Read(numFacets, 0, STL_BIN_NUM_FACET_LENGTH / 2);
+                // Facets count is little endian
+                if (!BitConverter.IsLittleEndian)
+                {
+                    // Transpose bytes into big endian
+                }
+
                 NumFacets = BitConverter.ToInt64(numFacets, 0);
                 byte[] facet = new byte[STL_BIN_FACET_LENGTH];
-                List<Vector3D<float>> vertices = new List<Vector3D<float>>();
                 Vector3D<double> normal = new Vector3D<double>();
                 Vector3D<double> vX = new Vector3D<double>();
                 Vector3D<double> vY = new Vector3D<double>();
@@ -224,6 +242,11 @@ namespace RocketSimulator
                 for (long i = 0; i < NumFacets; i++)
                 {
                     fileStream.Read(facet, 0, STL_BIN_FACET_LENGTH);
+                    if (!BitConverter.IsLittleEndian)
+                    {
+                        // Transpose to big endian
+                    }
+
                     // Normal
                     normal.X = BitConverter.ToSingle(facet, 0);
                     normal.Y = BitConverter.ToSingle(facet, 4);
@@ -249,7 +272,19 @@ namespace RocketSimulator
                     surface.AddVertex(vX);
                     surface.AddVertex(vY);
                     surface.AddVertex(vZ);
+
+                    // Add surface to list
+                    Surfaces.Add(surface);
                 }
+            }
+
+            /// <summary>
+            /// Hopefully we do not need this.
+            /// </summary>
+            /// <returns></returns>
+            private Vector3D<double> GetPositionFromVertices()
+            {
+                throw new NotImplementedException();
             }
 
             private string ReadNextASCIILine()

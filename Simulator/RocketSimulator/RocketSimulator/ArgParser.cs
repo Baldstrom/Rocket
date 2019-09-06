@@ -20,13 +20,14 @@ namespace RocketSimulator
                 // Check for action
                 if (arg.StartsWith("-"))
                 {
-                    switch(arg.Skip(1).ToString())
+                    switch(arg.Substring(1))
                     {
                         case "t":
                         case "timescale":
                             // Expect 1 double
                             // Check if timescale action already exists in action set
                             // Only act if it is a new option
+                            if (arguments.Count() <= i + 1) { err.Add("ERROR: LACKING TIMESCALE ARGUMENT"); break; }
                             if (NumActionTypeInList(actionList, ActionType.TimeScale) == 0)
                             {
                                 // Create new timescale action
@@ -51,7 +52,13 @@ namespace RocketSimulator
                             if (NumActionTypeInList(actionList, ActionType.LoadStl) == 0)
                             {
                                 // Create STL action and add to actionList
+                                if (arguments.Count() <= i + 1) { err.Add("ERROR: LACKING STL FILE PATH PARAMETER"); break; }
                                 string filePath = arguments[i + 1];
+                                if (filePath.Trim().Equals(string.Empty))
+                                {
+                                    err.Add("ERROR: NO STL FILE PATH GIVEN");
+                                }
+
                                 if (File.Exists(filePath))
                                 {
                                     actionList.Add(new Action(ActionType.LoadStl, filePath, typeof(string)));
