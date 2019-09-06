@@ -129,12 +129,19 @@ namespace RocketSimulator
                 bool FileIsASCII = false;
                 while (lookingFor == lookingAt)
                 {
-                    if (lookIndex == solid.Length) { FileIsASCII = true; }
                     // Set loop characteristics
                     lookIndex++;
-                    lookingAt = (char)fileStream.ReadByte();
-                    header[lookIndex] = lookingAt;
-                    lookingFor = solid[lookIndex];
+                    if (lookIndex == solid.Length)
+                    {
+                        FileIsASCII = true;
+                        break;
+                    }
+                    else
+                    {
+                        lookingAt = (char)fileStream.ReadByte();
+                        header[lookIndex] = lookingAt;
+                        lookingFor = solid[lookIndex];
+                    }
                 }
 
                 if (FileIsASCII)
