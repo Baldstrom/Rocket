@@ -174,23 +174,32 @@ namespace RocketSimulator
             // Use ray tracing for determination
             private void DetermineExteriorSurfaces()
             {
+                int percentIndMax = this.Surfaces.Count;
+                int percentInd = 0;
                 Logging.Print("ANALYZING STL FILE...");
+                Logging.OpenPercentageIndicator(percentIndMax, true);
+
                 foreach (Surface thisSurface in this.Surfaces)
                 {
+                    percentInd++;
+                    Logging.UpdatePercentageIndicator(percentInd);
                     // Foreach surface see if another surface collides with 
                     // normal vector in either direction.
-                    if (!SurfaceCollidesWithOther(thisSurface))
+                    if (!SurfaceIsInterior(thisSurface))
                     {
                         // If a direction does not result in collision, it is an exterior surface
                         // So do as such
                         thisSurface.IsExterior = true;
                     }
                 }
+                Logging.ClosePercentageIndicator();
                 Logging.Print("FINISHED STL ANALYSIS.");
             }
 
-            private bool SurfaceCollidesWithOther(Surface testSurface)
+            private bool SurfaceIsInterior(Surface testSurface)
             {
+                int posDirCnt = 0;
+                int negDirCnt = 0;
                 // Loop on all other surfaces and check for collision
                 foreach (Surface checkSurface in this.Surfaces)
                 {
@@ -198,21 +207,72 @@ namespace RocketSimulator
                     {
                         // Find intersection of normal of testSurface to checkSurface 
                         // (assuming infinite plane)
-
                         // Check if point of intersection is within the vertices of the surface
-                        // If it is, it has not collided, return false
-
-                        // If it did collide, check other normal direction
-                        Vector3D<double> otherNormal = testSurface.Normal.Multiply(-1);
-
+                        // If it is, it has collided, return false
+                        bool collides = PointOnSurface(CollisionPoint(testSurface, checkSurface, out int direction), checkSurface);
+                        if (collides)
+                        {
+                            if (direction >= 0) { posDirCnt++; }
+                            else { negDirCnt++; }
+                        }
                     }
                 }
 
-                return false;
+                // As long as one direction is zero it is an exterior surface
+                if (posDirCnt == 1 || negDirCnt == 0) { return false; }
+                else { return true; }
             }
 
+            private Vector3D<double> CollisionPoint(Surface surface1, Surface surface2, out int direction)
+            {
+                // We have all the information for a plane equation
+                // Plane equation given as: (N=normal vector) <x0, y0, z0> a point on plane. (p0)
+                // N.x * (x-x0) + N.y * (y-y0) + N.z * (z-z0) = 0
+
+                // Find two points on the line to parameterize the line / normal vector
+                // r(t) = p1 + t*(p2-p1)
+                // r(t) = point1 + diff * t
+
+                // Find intersection with other normal
+                // Solve N.x * (r(t).X-x0) + N.Y * (r(t).Y-y0) + N.z * (r(t).Z-z0) = 0
+                // Find, t, then solve for r(t) x = r(t).X
+
+                // Expand
+                // N.x * r(t).X - N.x*x0 + N.Y * r(t).Y - N.Y * y0 + N.z * r(t).Z - N.z * z0 = 0
+                // N.x * r(t).X + N.y * r(t).y + N.z * r(t).z = dot(N, p0)
+                // dot(N, r(t)) = dot(N, p0)
+                // solve for t
+
+                // Expand this further:
+                // N.x * r(t).X + N.y * r(t).y + N.z * r(t).z = dot(N, p0)
+                // r(t).X = p1.X + diff.X*t, r(t).Y = ...
+                // N.X * (p1.X + diff.X*t) + N.Y * (p1.Y + diff.Y*t) + N.Z * (p1.Z + diff.Z*t) = dot(N, p0)
+                // N.X*p1.X + N.X*diff.X*t + N.Y*p1.Y + N.Y*diff.Y*t + N.Z*p1.Z + N.Z*diff.Z*t = dot(N, p0)
+                // dot(N,diff)*t = dot(N, p0) - dot(N,p1)
+                // t = (dot(N, p0) - dot(N, p1)) / dot(N,diff)
+                
+                // t solved as follows:
+                double t = (surface2.Normal.Dot(surface1.Position) - surface2.Normal.Dot(surface2.Position)) / surface2.Normal.Dot(surface2.Normal);
+                direction = t >= 0 ? 1 : -1;
+                return surface2.Position.Add(surface2.Normal.Multiply(t));
+            }
+
+            private bool PointOnSurface(Vector3D<double> point, Surface plane)
+            {
+                bool inside = PointOnSameSide(point, plane.Vertices[0], plane.Vertices[1], plane.Vertices[2]);
+                inside &= PointOnSameSide(point, plane.Vertices[1], plane.Vertices[0], plane.Vertices[2]);
+                inside &= PointOnSameSide(point, plane.Vertices[2], plane.Vertices[0], plane.Vertices[1]);
+                return inside;
+            }
+
+            private bool PointOnSameSide(Vector3D<double> p1, Vector3D<double> p2, Vector3D<double> A, Vector3D<double> B)
+            {
+                return (B - A).Cross(p1 - A).Dot((B - A).Cross(p2 - A)) >= 0;
+            }
             private void GetASCIISurfaces()
             {
+                Logging.Print("DETECTED ASCII STL");
+
                 string nextLine = ReadNextASCIILine();
                 Vector3D<double> normal = new Vector3D<double>();
                 Vector3D<double> curVertex = new Vector3D<double>();
@@ -222,6 +282,12 @@ namespace RocketSimulator
                 int numVerticesAdded = 0;
                 bool started = false;
                 Surface surface = new Surface();
+
+                int ThisPercentageIndicator = 5;
+                int CurrentPercentageIndicator = 0;
+
+                Logging.OpenPercentageIndicator(ThisPercentageIndicator, false);
+
                 while (nextLine != string.Empty && !nextLine.Contains("endsolid"))
                 {
                     if (numVerticesAdded == 3)
@@ -256,11 +322,16 @@ namespace RocketSimulator
                     }
                     // Next Line
                     nextLine = ReadNextASCIILine();
+                    CurrentPercentageIndicator++;
+                    Logging.UpdatePercentageIndicator(CurrentPercentageIndicator % ThisPercentageIndicator);
                 }
+                Logging.ClosePercentageIndicator();
             }
 
             private void GetBinarySurfaces()
             {
+                Logging.Print("DETECTED BINARY STL");
+
                 byte[] numFacets = new byte[STL_BIN_NUM_FACET_LENGTH];
                 // Skip header
                 fileStream.Seek(STL_BIN_HEADER_LENGTH, SeekOrigin.Begin);
@@ -271,8 +342,10 @@ namespace RocketSimulator
                 {
                     // TODO: Transpose bytes into big endian
                 }
-
                 NumFacets = BitConverter.ToInt64(numFacets, 0);
+
+                Logging.OpenPercentageIndicator(NumFacets, true);
+
                 byte[] facet = new byte[STL_BIN_FACET_LENGTH];
                 Vector3D<double> normal = new Vector3D<double>();
                 Vector3D<double> vX = new Vector3D<double>();
@@ -314,7 +387,9 @@ namespace RocketSimulator
 
                     // Add surface to list
                     Surfaces.Add(surface);
+                    Logging.UpdatePercentageIndicator(i);
                 }
+                Logging.ClosePercentageIndicator();
             }
 
             /// <summary>
