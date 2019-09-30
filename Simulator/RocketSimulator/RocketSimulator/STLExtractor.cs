@@ -171,11 +171,44 @@ namespace RocketSimulator
                 DetermineExteriorSurfaces();
             }
 
+            // Use ray tracing for determination
             private void DetermineExteriorSurfaces()
             {
                 Logging.Print("ANALYZING STL FILE...");
-
+                foreach (Surface thisSurface in this.Surfaces)
+                {
+                    // Foreach surface see if another surface collides with 
+                    // normal vector in either direction.
+                    if (!SurfaceCollidesWithOther(thisSurface))
+                    {
+                        // If a direction does not result in collision, it is an exterior surface
+                        // So do as such
+                        thisSurface.IsExterior = true;
+                    }
+                }
                 Logging.Print("FINISHED STL ANALYSIS.");
+            }
+
+            private bool SurfaceCollidesWithOther(Surface testSurface)
+            {
+                // Loop on all other surfaces and check for collision
+                foreach (Surface checkSurface in this.Surfaces)
+                {
+                    if (checkSurface != testSurface)
+                    {
+                        // Find intersection of normal of testSurface to checkSurface 
+                        // (assuming infinite plane)
+
+                        // Check if point of intersection is within the vertices of the surface
+                        // If it is, it has not collided, return false
+
+                        // If it did collide, check other normal direction
+                        Vector3D<double> otherNormal = testSurface.Normal.Multiply(-1);
+
+                    }
+                }
+
+                return false;
             }
 
             private void GetASCIISurfaces()
