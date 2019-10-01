@@ -2,11 +2,10 @@
 using Control;
 using Control.FlightStatus;
 using RocketSimulator.Parts;
-using System;
+using RocketSimulator.CLI;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RocketSimulator.STL;
 
 namespace RocketSimulator
 {
@@ -23,12 +22,12 @@ namespace RocketSimulator
         public static void Main(string[] args)
         {
             rocketCreation = DefaultMakeRocket;
-            List<Action> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
+            List<CLIAction> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
             Logging.Print(argErrors, Logging.PrintType.ERROR);
             Logging.Print(argWarnings, Logging.PrintType.WARNING);
             if (argErrors.Count() == 0)
             {
-                foreach (Action argParseAction in argParseActions)
+                foreach (CLIAction argParseAction in argParseActions)
                 {
                     // Do actions
                     switch (argParseAction.act)
@@ -145,10 +144,10 @@ namespace RocketSimulator
 
         }
 
-        private static void PrintArgs(List<Action> argActions)
+        private static void PrintArgs(List<CLIAction> argActions)
         {
             // TODO: Implement debugging arguments
-            foreach (Action act in argActions)
+            foreach (CLIAction act in argActions)
             {
 
             }

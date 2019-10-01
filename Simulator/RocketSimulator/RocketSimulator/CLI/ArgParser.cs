@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RocketSimulator
+namespace RocketSimulator.CLI
 {
     public static class ArgParser
     {
-        public static List<Action> GetActions(string[] arguments, out string[] warnings, out string[] errors)
+        public static List<CLIAction> GetActions(string[] arguments, out string[] warnings, out string[] errors)
         {
             List<string> warn = new List<string>();
             List<string> err = new List<string>();
-            List<Action> actionList = new List<Action>();
+            List<CLIAction> actionList = new List<CLIAction>();
             for (int i = 0; i < arguments.Length; i++)
             {
                 string arg = arguments[i];
@@ -27,7 +27,7 @@ namespace RocketSimulator
                             // Expect no parameters
                             if (NumActionTypeInList(actionList, ActionType.ArgDebug) == 0)
                             {
-                                actionList.Add(new Action(ActionType.ArgDebug));
+                                actionList.Add(new CLIAction(ActionType.ArgDebug));
                             }
                             break;
                         case "t":
@@ -42,7 +42,7 @@ namespace RocketSimulator
                                 ActionType thisActType = ActionType.TimeScale;
                                 Type thisActValueType = typeof(float);
                                 bool success = float.TryParse(arguments[i + 1], out float thisActValue);
-                                if (success) { actionList.Add(new Action(thisActType, thisActValue, thisActValueType)); }
+                                if (success) { actionList.Add(new CLIAction(thisActType, thisActValue, thisActValueType)); }
                                 else { warn.Add("WARNING: COULD NOT PARSE TIMESCALE ARGUMENT AS FLOAINNG POINT VALUE."); }
                             }
                             else
@@ -68,7 +68,7 @@ namespace RocketSimulator
 
                                 if (File.Exists(filePath))
                                 {
-                                    actionList.Add(new Action(ActionType.LoadStl, filePath, typeof(string)));
+                                    actionList.Add(new CLIAction(ActionType.LoadStl, filePath, typeof(string)));
                                 }
                                 else
                                 {
@@ -87,7 +87,7 @@ namespace RocketSimulator
                             // No parameters
                             if (NumActionTypeInList(actionList, ActionType.PrintCSVs) == 0)
                             {
-                                actionList.Add(new Action(ActionType.PrintCSVs));
+                                actionList.Add(new CLIAction(ActionType.PrintCSVs));
                             }
                             break;
                         default:
@@ -107,12 +107,12 @@ namespace RocketSimulator
         /// <param name="list">List to search</param>
         /// <param name="searchType">Type to search for in list.</param>
         /// <returns>Number of times searchType appears as an action in the list</returns>
-        private static int NumActionTypeInList(List<Action> list, ActionType searchType)
+        private static int NumActionTypeInList(List<CLIAction> list, ActionType searchType)
         {
             if (list.Count > 0)
             {
                 int count = 0;
-                foreach (Action action in list)
+                foreach (CLIAction action in list)
                 {
                     if (action.act.Equals(searchType))
                     {
@@ -125,20 +125,20 @@ namespace RocketSimulator
         }
     }
 
-    public struct Action
+    public struct CLIAction
     {
         public readonly ActionType act;
         public readonly object actionValue;
         public readonly Type actionValueType;
 
-        public Action(ActionType act, object actionValue, Type actionValueType)
+        public CLIAction(ActionType act, object actionValue, Type actionValueType)
         {
             this.act = act;
             this.actionValue = actionValue;
             this.actionValueType = actionValueType;
         }
 
-        public Action(ActionType act)
+        public CLIAction(ActionType act)
         {
             this.act = act;
             actionValue = null;

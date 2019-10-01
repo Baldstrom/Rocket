@@ -1,11 +1,13 @@
 ﻿using ALPHASim.SimMath;
+using RocketSimulator.CLI;
 using RocketSimulator.Parts;
+using RocketSimulator.STL;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using static RocketSimulator.Parts.Rocket;
 
-namespace RocketSimulator
+namespace RocketSimulator.STL
 {
     public class STLExtractor
     {
@@ -14,12 +16,14 @@ namespace RocketSimulator
         public const int STL_BIN_FACET_LENGTH = 50;
         public const int STL_BIN_NUM_FACET_LENGTH = 8;
 
+        private const int MAX_BIN_STL_FACETS_PRINT_LOADING = 300000;
+
         public bool IsValid { get; private set; }
         public FileValidity ValidState { get; private set; }
         
         private STLFile STL;
 
-        public STLExtractor(string stlFileLocation, StlUnits units = StlUnits.Centimeters)
+        public STLExtractor(string stlFileLocation, STLInfo.STLUnits units = STLInfo.STLUnits.Centimeters)
         {
             if (File.Exists(stlFileLocation))
             {
@@ -77,23 +81,12 @@ namespace RocketSimulator
             PathTooLong,
             UnsupportedFileOperation
         }
-
-        public enum StlUnits
-        {
-            Millimeters,
-            Centimeters,
-            Micrometers,
-            Meters,
-            Mils,
-            Inches,
-        }
-
-
+        
         private class STLFile
         {
             public string Name;
-            public StlType Type;
-            public StlUnits Units;
+            public STLInfo.STLType Type;
+            public STLInfo.STLUnits Units;
 
             public List<Surface> Surfaces;
 
@@ -101,7 +94,7 @@ namespace RocketSimulator
             private StreamReader reader;
             private long NumFacets;
 
-            public STLFile(FileStream fileStream, StlUnits units)
+            public STLFile(FileStream fileStream, STLInfo.STLUnits units)
             {
                 // Set vars
                 Surfaces = new List<Surface>();
@@ -149,7 +142,7 @@ namespace RocketSimulator
                     // Use streamreader
                     // Read line to determine name
                     Name = reader.ReadLine();
-                    Type =  StlType.ASCII;
+                    Type = STLInfo.STLType.ASCII;
                 }
                 else
                 {
@@ -159,14 +152,14 @@ namespace RocketSimulator
                         header[i] = (char)fileStream.ReadByte();
                     }
                     Name = header.ToString();
-                    Type = StlType.Binary;
+                    Type = STLInfo.STLType.Binary;
                 }
             }
 
             private void GetSurfaces()
             {
                 Logging.Print("DECODING STL FILE...");
-                if (this.Type == StlType.ASCII) { GetASCIISurfaces(); }
+                if (this.Type == STLInfo.STLType.ASCII) { GetASCIISurfaces(); }
                 else { GetBinarySurfaces(); }
                 DetermineExteriorSurfaces();
             }
@@ -215,12 +208,10 @@ namespace RocketSimulator
                             if (direction >= 0) { posDirCnt++; }
                             else { negDirCnt++; }
                         }
+                        if (posDirCnt > 0 && negDirCnt > 0) { return true; }
                     }
                 }
-
-                // As long as one direction is zero it is an exterior surface
-                if (posDirCnt == 1 || negDirCnt == 0) { return false; }
-                else { return true; }
+                return false;
             }
 
             private Vector3D<double> CollisionPoint(Surface surface1, Surface surface2, out int direction)
@@ -344,7 +335,10 @@ namespace RocketSimulator
                 }
                 NumFacets = BitConverter.ToInt64(numFacets, 0);
 
-                Logging.OpenPercentageIndicator(NumFacets, true);
+                if (NumFacets > MAX_BIN_STL_FACETS_PRINT_LOADING)
+                {
+                    Logging.OpenPercentageIndicator(NumFacets, true);
+                }
 
                 byte[] facet = new byte[STL_BIN_FACET_LENGTH];
                 Vector3D<double> normal = new Vector3D<double>();
@@ -387,9 +381,15 @@ namespace RocketSimulator
 
                     // Add surface to list
                     Surfaces.Add(surface);
-                    Logging.UpdatePercentageIndicator(i);
+                    if (Logging.IsPercentageIndicatorOpen)
+                    {
+                        Logging.UpdatePercentageIndicator(i);
+                    }
                 }
-                Logging.ClosePercentageIndicator();
+                if (Logging.IsPercentageIndicatorOpen)
+                {
+                    Logging.ClosePercentageIndicator();
+                }
             }
 
             /// <summary>
@@ -405,12 +405,6 @@ namespace RocketSimulator
             {
                 try { return reader.ReadLine(); }
                 catch (IOException) { throw new IOException("Could not read ASCII STL."); }
-            }
-
-            public enum StlType
-            {
-                Binary,
-                ASCII
             }
 
         }

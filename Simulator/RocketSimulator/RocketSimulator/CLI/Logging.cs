@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RocketSimulator
+namespace RocketSimulator.CLI
 {
+    // TODO: Seperate Loading bar to another class. Add a logging folder.
     public static class Logging
     {
         public enum PrintType
@@ -18,11 +19,11 @@ namespace RocketSimulator
         private static PrintType CurrentConsoleConditions;
         private static ConsoleColor DefaultConsoleColor;
 
-        private static bool IsPercentageIndicatorOpen;
+        public static bool IsPercentageIndicatorOpen { get; private set; }
         private static long PercentageIndicatorMax;
         private static bool PercentageIndicatorTelemetryVisible;
 
-        public static int PercentageWidth = 100;
+        public static int PercentageWidth = 50;
 
         #region CSV Fields
         public static bool IsCSVSetup { get; private set; }
@@ -104,6 +105,7 @@ namespace RocketSimulator
         {
             if (IsPercentageIndicatorOpen)
             {
+                // TODO: Handle when the console splits a line due to sizing
                 Console.Write("\r");
                 Console.Write("[");
                 for(int i = 0; i < PercentageWidth; i++)
