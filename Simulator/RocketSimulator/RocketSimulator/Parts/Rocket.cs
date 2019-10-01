@@ -26,6 +26,7 @@ namespace RocketSimulator.Parts
         {
             this.Config = config;
             this.Surfaces = new List<Surface>();
+            this.ExteriorSurfaces = new List<Surface>();
         }
 
         public Rocket(RocketConfiguration config, List<Surface> surfaces) : this (config) 

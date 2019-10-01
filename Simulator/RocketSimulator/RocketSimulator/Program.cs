@@ -6,6 +6,7 @@ using RocketSimulator.CLI;
 using System.Collections.Generic;
 using System.Linq;
 using RocketSimulator.STL;
+using RocketSimulator.Tests;
 
 namespace RocketSimulator
 {
@@ -44,13 +45,23 @@ namespace RocketSimulator
                             break;
                         case ActionType.ArgDebug:
                             PrintArgs(argParseActions);
+                            Logging.Print("");
+                            break;
+                        case ActionType.Test:
+                            string testParams = (string)argParseAction.actionValue;
+                            Logging.Print("TEST PROTOCOL INITIATED.");
+                            Logging.Print("PARAMETERS: " + testParams);
+                            TestProtocol.RunTests(testParams);
+                            Logging.Print("TEST CONCLUDED.\n");
                             break;
                         default:
                             break;
                     }
                 }
+                Logging.Print("SIMULATION BEGINS.");
                 Run();
             }
+            Logging.Print("EXITING.");
             Logging.Close();
         }
 

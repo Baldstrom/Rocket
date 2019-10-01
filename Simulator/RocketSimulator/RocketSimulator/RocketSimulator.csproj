@@ -73,6 +73,8 @@
     <Compile Include="STL\STLExtractor.cs" />
     <Compile Include="STL\STLInfo.cs" />
     <Compile Include="STL\STLInserter.cs" />
+    <Compile Include="Tests\TestLoadingBar.cs" />
+    <Compile Include="Tests\TestProtocol.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

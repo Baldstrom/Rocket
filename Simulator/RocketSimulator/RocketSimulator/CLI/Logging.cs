@@ -23,7 +23,7 @@ namespace RocketSimulator.CLI
         private static long PercentageIndicatorMax;
         private static bool PercentageIndicatorTelemetryVisible;
 
-        public static int PercentageWidth = 50;
+        public static int PercentageWidth = 100;
 
         #region CSV Fields
         public static bool IsCSVSetup { get; private set; }

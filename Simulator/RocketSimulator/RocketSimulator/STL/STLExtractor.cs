@@ -58,9 +58,8 @@ namespace RocketSimulator.STL
                 CenterOfThrust = new Vector3D<double>(),
             };
             // Set surfaces
-            List<Surface> surfaces = STL.Surfaces;
-
-            return new Rocket(config, surfaces);
+            
+            return new Rocket(config, STL.Surfaces);
         }
 
         public void SwapOrientation(OrientationVector newX, OrientationVector newY, OrientationVector newZ)

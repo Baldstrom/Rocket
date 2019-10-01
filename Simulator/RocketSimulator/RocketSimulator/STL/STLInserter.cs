@@ -22,28 +22,26 @@ namespace RocketSimulator.STL
             string filepath = filename + STL_EXTENSION;
             File.Create(filepath);
             FileStream stream = File.OpenWrite(filepath);
-
+            bool success = false;
+            // Write file if switch on stl type
             if (type == STLInfo.STLType.Binary)
             {
                 if (WriteBinaryHeader(null, filename))
                 {
-                    bool success = WriteBinarySTL(null, surfaces);
-                } else { return false; }
+                    success = WriteBinarySTL(null, surfaces);
+                }
             }
             else
             {
-                if (WriteASCIIHeader(null, filename))
-                {
-                    bool success = WriteASCIISTL(null, surfaces);
-                    
-                } else { return false; }
+                throw new NotImplementedException();
             }
-            return true;
+            stream.Close();
+            return success;
         }
 
         private static bool WriteASCIIHeader(FileStream file, string name)
         {
-            return false;
+            throw new NotImplementedException();
         }
 
         private static bool WriteBinaryHeader(FileStream file, string name)
@@ -53,7 +51,7 @@ namespace RocketSimulator.STL
 
         private static bool WriteASCIISTL(FileStream file, List<Surface> surfaces)
         {
-            return false;
+            throw new NotImplementedException();
         }
 
         private static bool WriteBinarySTL(FileStream file, List<Surface> surfaces)

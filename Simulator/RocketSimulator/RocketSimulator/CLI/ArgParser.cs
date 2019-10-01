@@ -90,6 +90,19 @@ namespace RocketSimulator.CLI
                                 actionList.Add(new CLIAction(ActionType.PrintCSVs));
                             }
                             break;
+                        case "te":
+                        case "test":
+                            StringBuilder newStr = new StringBuilder();
+                            string nxtStr = arguments[i + 1];
+                            while (!nxtStr.StartsWith("-"))
+                            {
+                                newStr.Append(nxtStr);
+                                newStr.Append(" ");
+                                i++;
+                                nxtStr = arguments[i + 1];
+                            }
+                            actionList.Add(new CLIAction(ActionType.Test, newStr.ToString(), typeof(string)));
+                            break;
                         default:
                             break;
                     }
@@ -153,6 +166,6 @@ namespace RocketSimulator.CLI
         PrintCSVs,
         TimeScale,
         ArgDebug,
-
+        Test,
     }
 }
