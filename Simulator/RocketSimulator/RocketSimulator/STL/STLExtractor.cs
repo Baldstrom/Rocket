@@ -4,6 +4,7 @@ using RocketSimulator.Parts;
 using RocketSimulator.STL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using static RocketSimulator.Parts.Rocket;
 
@@ -157,10 +158,16 @@ namespace RocketSimulator.STL
 
             private void GetSurfaces()
             {
+                Stopwatch timer = new Stopwatch();
                 Logging.Print("DECODING STL FILE...");
                 if (this.Type == STLInfo.STLType.ASCII) { GetASCIISurfaces(); }
                 else { GetBinarySurfaces(); }
+                timer.Start();
                 DetermineExteriorSurfaces();
+                timer.Stop();
+                TimeSpan timeSpan = timer.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                Logging.Print("ANALYSIS TOOK: " + elapsedTime);
             }
 
             // Use ray tracing for determination

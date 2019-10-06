@@ -46,6 +46,7 @@ namespace RocketSimulator.STL
 
         private static bool WriteBinaryHeader(FileStream file, string name)
         {
+
             return false;
         }
 
