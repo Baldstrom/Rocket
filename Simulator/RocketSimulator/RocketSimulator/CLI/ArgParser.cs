@@ -103,6 +103,46 @@ namespace RocketSimulator.CLI
                             }
                             actionList.Add(new CLIAction(ActionType.Test, newStr.ToString(), typeof(string)));
                             break;
+                        case "wb":
+                        case "writeback":
+                            if (NumActionTypeInList(actionList, ActionType.PrintCSVs) == 0)
+                            {
+                                newStr = new StringBuilder();
+                                if (arguments.Length > (i + 1))
+                                {
+                                    nxtStr = arguments[i + 1];
+                                    // Determine name
+                                    while (!nxtStr.StartsWith("-"))
+                                    {
+                                        newStr.Append(nxtStr);
+                                        newStr.Append(" ");
+                                        i++;
+                                        nxtStr = arguments[i + 1];
+                                    }
+                                }
+                                actionList.Add(new CLIAction(ActionType.Writeback, newStr.ToString(), typeof(string)));
+                            }
+                            break;
+                        case "wbe":
+                        case "extwrite":
+                            if (NumActionTypeInList(actionList, ActionType.PrintCSVs) == 0)
+                            {
+                                newStr = new StringBuilder();
+                                if (arguments.Length > (i + 1))
+                                {
+                                    nxtStr = arguments[i + 1];
+                                    // Determine name
+                                    while (!nxtStr.StartsWith("-"))
+                                    {
+                                        newStr.Append(nxtStr);
+                                        newStr.Append(" ");
+                                        i++;
+                                        nxtStr = arguments[i + 1];
+                                    }
+                                }
+                                actionList.Add(new CLIAction(ActionType.WritebackExterior, newStr.ToString(), typeof(string)));
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -167,5 +207,7 @@ namespace RocketSimulator.CLI
         TimeScale,
         ArgDebug,
         Test,
+        Writeback,
+        WritebackExterior,
     }
 }

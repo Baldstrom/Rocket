@@ -13,9 +13,8 @@ namespace RocketSimulator.STL
     public class STLExtractor
     {
         // Max length of an STL header
-        public const int STL_BIN_HEADER_LENGTH = 80;
-        public const int STL_BIN_FACET_LENGTH = 50;
-        public const int STL_BIN_NUM_FACET_LENGTH = 8;
+        
+
 
         private const int MAX_BIN_STL_FACETS_PRINT_LOADING = 300000;
 
@@ -114,7 +113,7 @@ namespace RocketSimulator.STL
             private void GetTypeAndName()
             {
                 // Read 80 bytes or until "solid"
-                char[] header = new char[STL_BIN_HEADER_LENGTH];
+                char[] header = new char[STLInfo.STL_BIN_HEADER_LENGTH];
                 string solid = "solid ";
                 int lookIndex = 0;
                 char lookingFor = solid[lookIndex];
@@ -329,11 +328,11 @@ namespace RocketSimulator.STL
             {
                 Logging.Print("DETECTED BINARY STL");
 
-                byte[] numFacets = new byte[STL_BIN_NUM_FACET_LENGTH];
+                byte[] numFacets = new byte[STLInfo.STL_BIN_NUM_FACET_LENGTH];
                 // Skip header
-                fileStream.Seek(STL_BIN_HEADER_LENGTH, SeekOrigin.Begin);
+                fileStream.Seek(STLInfo.STL_BIN_HEADER_LENGTH, SeekOrigin.Begin);
                 // Read facets
-                fileStream.Read(numFacets, 0, STL_BIN_NUM_FACET_LENGTH / 2);
+                fileStream.Read(numFacets, 0, STLInfo.STL_BIN_NUM_FACET_LENGTH / 2);
                 // Facets count is little endian
                 if (!BitConverter.IsLittleEndian)
                 {
@@ -346,14 +345,14 @@ namespace RocketSimulator.STL
                     Logging.OpenPercentageIndicator(NumFacets, true);
                 }
 
-                byte[] facet = new byte[STL_BIN_FACET_LENGTH];
+                byte[] facet = new byte[STLInfo.STL_BIN_FACET_LENGTH];
                 Vector3D<double> normal = new Vector3D<double>();
                 Vector3D<double> vX = new Vector3D<double>();
                 Vector3D<double> vY = new Vector3D<double>();
                 Vector3D<double> vZ = new Vector3D<double>();
                 for (long i = 0; i < NumFacets; i++)
                 {
-                    fileStream.Read(facet, 0, STL_BIN_FACET_LENGTH);
+                    fileStream.Read(facet, 0, STLInfo.STL_BIN_FACET_LENGTH);
                     if (!BitConverter.IsLittleEndian)
                     {
                         // TODO: Transpose to big endian

@@ -22,6 +22,8 @@ namespace RocketSimulator.CLI
         public static bool IsPercentageIndicatorOpen { get; private set; }
         private static long PercentageIndicatorMax;
         private static bool PercentageIndicatorTelemetryVisible;
+        private static int CurrentCursorPosition;
+        private static int TelemetryPosition;
 
         public static int PercentageWidth = 100;
 
@@ -98,6 +100,8 @@ namespace RocketSimulator.CLI
                 PercentageIndicatorMax = max;
                 IsPercentageIndicatorOpen = true;
                 PercentageIndicatorTelemetryVisible = telemetryVisible;
+                CurrentCursorPosition = 1;
+                TelemetryPosition = PercentageWidth + 4;
             }
         }
 
@@ -106,25 +110,18 @@ namespace RocketSimulator.CLI
             if (IsPercentageIndicatorOpen)
             {
                 // TODO: Handle when the console splits a line due to sizing
-                Console.Write("\r");
-                Console.Write("[");
-                for(int i = 0; i < PercentageWidth; i++)
-                {
-                    // Get Percentage 
-                    long percent = (10000 * current) / (PercentageIndicatorMax * PercentageWidth);
+                Console.SetCursorPosition(CurrentCursorPosition, Console.CursorTop);
+                if (CurrentCursorPosition == PercentageWidth + 1) { return; }
 
-                    if (i < percent)
-                    {
-                        Console.Write("#");
-                    }
-                    else
-                    {
-                        Console.Write(" ");
-                    }
+                if ((current / PercentageIndicatorMax) > (CurrentCursorPosition / PercentageWidth))
+                {
+                    Console.Write("#");
+                    CurrentCursorPosition++;
                 }
-                Console.Write("]");
+
                 if (PercentageIndicatorTelemetryVisible)
                 {
+                    Console.SetCursorPosition(TelemetryPosition, Console.CursorTop);
                     Console.Write(" (" + current.ToString() + " / " + PercentageIndicatorMax.ToString() + ")");
                 }
             }

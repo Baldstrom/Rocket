@@ -26,6 +26,12 @@ namespace RocketSimulator
             List<CLIAction> argParseActions = ArgParser.GetActions(args, out string[] argWarnings, out string[] argErrors);
             Logging.Print(argErrors, Logging.PrintType.ERROR);
             Logging.Print(argWarnings, Logging.PrintType.WARNING);
+
+            bool writebackSTL = false;
+            CLIAction writeBackAct = new CLIAction();
+            bool writebackExteriorSTL = false;
+            CLIAction writeBackExtAct = new CLIAction();
+
             if (argErrors.Count() == 0)
             {
                 foreach (CLIAction argParseAction in argParseActions)
@@ -54,10 +60,41 @@ namespace RocketSimulator
                             TestProtocol.RunTests(testParams);
                             Logging.Print("TEST CONCLUDED.\n");
                             break;
+                        case ActionType.Writeback:
+                            writebackSTL = true;
+                            writeBackAct = argParseAction;
+                            break;
+                        case ActionType.WritebackExterior:
+                            writebackExteriorSTL = true;
+                            writeBackExtAct = argParseAction;
+                            break;
                         default:
                             break;
                     }
                 }
+
+                // STL File writeback
+                if (writebackSTL)
+                {
+                    string filename = "Untitled";
+                    if (writeBackAct.actionValue != null)
+                    {
+                        filename = (string)writeBackAct.actionValue;
+                    }
+                    STLInserter.CreateSTLFile(filename, simRocket.Surfaces, STLInfo.STLType.Binary);
+                }
+
+                // STL File Exterior writeback
+                if (writebackExteriorSTL)
+                {
+                    string filename = "Untitled";
+                    if (writeBackAct.actionValue != null)
+                    {
+                        filename = (string)writeBackAct.actionValue;
+                    }
+                    STLInserter.CreateSTLFile(filename, simRocket.ExteriorSurfaces, STLInfo.STLType.Binary);
+                }
+
                 Logging.Print("SIMULATION BEGINS.");
                 Run();
             }
