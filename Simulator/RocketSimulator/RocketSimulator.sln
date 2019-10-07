@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocketSimulator", "RocketSimulator\RocketSimulator.csproj", "{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}"
 EndProject
@@ -13,22 +13,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulatorUI", "SimulatorUI\
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		BuildAll|Any CPU = BuildAll|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
 		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74A64AD7-CFB7-46C8-A709-1474D5048306}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{74A64AD7-CFB7-46C8-A709-1474D5048306}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
 		{74A64AD7-CFB7-46C8-A709-1474D5048306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74A64AD7-CFB7-46C8-A709-1474D5048306}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A64AD7-CFB7-46C8-A709-1474D5048306}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74A64AD7-CFB7-46C8-A709-1474D5048306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
 		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Release|Any CPU.ActiveCfg = Release|Any CPU
