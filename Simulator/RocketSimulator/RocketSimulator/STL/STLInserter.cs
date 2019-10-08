@@ -18,16 +18,15 @@ namespace RocketSimulator.STL
         {
             // Create file.
             string filepath = DetermineFilename(filename);
-            File.Create(filepath);
             FileStream stream = File.OpenWrite(filepath);
 
             bool success = false;
             // Write file if switch on stl type
             if (type == STLInfo.STLType.Binary)
             {
-                if (WriteBinaryHeader(null, filename))
+                if (WriteBinaryHeader(stream, filename))
                 {
-                    success = WriteBinarySTL(null, surfaces);
+                    success = WriteBinarySTL(stream, surfaces);
                 }
             }
             else
@@ -48,11 +47,17 @@ namespace RocketSimulator.STL
             // TODO: Check if name begins with SOLID?
             // Write name
             byte[] headerBytes = new byte[STLInfo.STL_BIN_HEADER_LENGTH];
+            byte space = Encoding.UTF8.GetBytes(" ")[0];
+            // Fill header with spaces
+            for (int i = 0; i < headerBytes.Length; i++) { headerBytes[i] = space; }
+
+            // Fill header with name
             byte[] nameBytes = Encoding.UTF8.GetBytes(name);
             if (nameBytes.Count() > STLInfo.STL_BIN_HEADER_LENGTH)
             {
                 headerBytes = nameBytes.ToList().Take(80).ToArray();
             }
+
             else { nameBytes.CopyTo(headerBytes, 0); }
             file.Write(headerBytes, 0, STLInfo.STL_BIN_HEADER_LENGTH);
             return true;
@@ -69,7 +74,7 @@ namespace RocketSimulator.STL
             byte[] numSurfaces = BitConverter.GetBytes((uint)surfaces.Count());
             file.Write(numSurfaces, 0, numSurfaces.Length);
 
-            byte[] result = new byte[48];
+            byte[] result = new byte[50];
 
             byte[] normal = new byte[12];
             byte[] v1 = new byte[12];
@@ -89,21 +94,41 @@ namespace RocketSimulator.STL
                 normalFloat[0] = (float)face.Normal.X;
                 normalFloat[1] = (float)face.Normal.Y;
                 normalFloat[2] = (float)face.Normal.Z;
-                Buffer.BlockCopy(normalFloat, 0, result, 0, 12);
+
+                Buffer.BlockCopy(BitConverter.GetBytes(normalFloat[0]), 0, normal, 0, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(normalFloat[1]), 0, normal, 4, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(normalFloat[2]), 0, normal, 8, 4);
+
+                Buffer.BlockCopy(normal, 0, result, 0, 12);
 
                 v1Float[0] = (float)face.Vertices[0].X;
                 v1Float[1] = (float)face.Vertices[0].Y;
                 v1Float[2] = (float)face.Vertices[0].Z;
-                Buffer.BlockCopy(v1Float, 0, result, 12, 12);
+
+                Buffer.BlockCopy(BitConverter.GetBytes(v1Float[0]), 0, v1, 0, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v1Float[1]), 0, v1, 4, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v1Float[2]), 0, v1, 8, 4);
+
+                Buffer.BlockCopy(v1, 0, result, 12, 12);
 
                 v2Float[0] = (float)face.Vertices[1].X;
                 v2Float[1] = (float)face.Vertices[1].Y;
                 v2Float[2] = (float)face.Vertices[1].Z;
-                Buffer.BlockCopy(v2Float, 0, result, 24, 12);
+
+                Buffer.BlockCopy(BitConverter.GetBytes(v2Float[0]), 0, v2, 0, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v2Float[1]), 0, v2, 4, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v2Float[2]), 0, v2, 8, 4);
+
+                Buffer.BlockCopy(v2, 0, result, 24, 12);
 
                 v3Float[0] = (float)face.Vertices[2].X;
                 v3Float[1] = (float)face.Vertices[2].Y;
                 v3Float[2] = (float)face.Vertices[2].Z;
+
+                Buffer.BlockCopy(BitConverter.GetBytes(v3Float[0]), 0, v3, 0, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v3Float[1]), 0, v3, 4, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(v3Float[2]), 0, v3, 8, 4);
+
                 Buffer.BlockCopy(v3Float, 0, result, 36, 12);
 
                 // Add att byte count
@@ -121,7 +146,14 @@ namespace RocketSimulator.STL
             int iteration = 1;
             while(File.Exists(result + STLInfo.STL_EXTENSION))
             {
+                if (iteration > 1)
+                {
+                    string numberAsStr = iteration.ToString();
+                    int ItLength = numberAsStr.Length;
+                    result = result.Remove(result.Length - (ItLength + 3), (ItLength + 3));
+                }
                 result += " (" + iteration.ToString() + ")";
+                iteration++;
             }
             return result + STLInfo.STL_EXTENSION;
         }

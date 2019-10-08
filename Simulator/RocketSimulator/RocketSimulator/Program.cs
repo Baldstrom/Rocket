@@ -6,7 +6,7 @@ using RocketSimulator.CLI;
 using System.Collections.Generic;
 using System.Linq;
 using RocketSimulator.STL;
-using RocketSimulator.Tests;
+using RocketSimulator.RuntimeTests;
 
 namespace RocketSimulator
 {
@@ -32,6 +32,8 @@ namespace RocketSimulator
             bool writebackExteriorSTL = false;
             CLIAction writeBackExtAct = new CLIAction();
 
+            bool InhibitSTLAnalysis = false;
+
             if (argErrors.Count() == 0)
             {
                 foreach (CLIAction argParseAction in argParseActions)
@@ -46,7 +48,7 @@ namespace RocketSimulator
                             Time.FLIGHT_RESOLUTION = (float)argParseAction.actionValue;
                             break;
                         case ActionType.LoadStl:
-                            STLExtractor primarySTL = new STLExtractor((string)argParseAction.actionValue);
+                            STLExtractor primarySTL = new STLExtractor((string)argParseAction.actionValue, STLInfo.STLUnits.Centimeters, InhibitSTLAnalysis);
                             if (primarySTL.IsValid) { simRocket = primarySTL.RocketFromSTL(); }
                             break;
                         case ActionType.ArgDebug:
@@ -68,6 +70,9 @@ namespace RocketSimulator
                             writebackExteriorSTL = true;
                             writeBackExtAct = argParseAction;
                             break;
+                        case ActionType.InhibitFullAnalysis:
+                            InhibitSTLAnalysis = true;
+                            break;
                         default:
                             break;
                     }
@@ -77,7 +82,7 @@ namespace RocketSimulator
                 if (writebackSTL)
                 {
                     string filename = "Untitled";
-                    if (writeBackAct.actionValue != null)
+                    if (writeBackAct.actionValue != null && !string.IsNullOrEmpty((string)writeBackAct.actionValue))
                     {
                         filename = (string)writeBackAct.actionValue;
                     }

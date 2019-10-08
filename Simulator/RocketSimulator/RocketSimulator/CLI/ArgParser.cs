@@ -14,6 +14,7 @@ namespace RocketSimulator.CLI
             List<string> warn = new List<string>();
             List<string> err = new List<string>();
             List<CLIAction> actionList = new List<CLIAction>();
+
             for (int i = 0; i < arguments.Length; i++)
             {
                 string arg = arguments[i];
@@ -143,6 +144,13 @@ namespace RocketSimulator.CLI
                                 actionList.Add(new CLIAction(ActionType.WritebackExterior, newStr.ToString(), typeof(string)));
                             }
                             break;
+                        case "no-analysis":
+                        case "na":
+                            if (NumActionTypeInList(actionList, ActionType.InhibitFullAnalysis) == 0)
+                            {
+                                actionList.Add(new CLIAction(ActionType.InhibitFullAnalysis));
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -209,5 +217,6 @@ namespace RocketSimulator.CLI
         Test,
         Writeback,
         WritebackExterior,
+        InhibitFullAnalysis,
     }
 }

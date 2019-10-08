@@ -12,10 +12,6 @@ namespace RocketSimulator.STL
 {
     public class STLExtractor
     {
-        // Max length of an STL header
-        
-
-
         private const int MAX_BIN_STL_FACETS_PRINT_LOADING = 300000;
 
         public bool IsValid { get; private set; }
@@ -23,13 +19,13 @@ namespace RocketSimulator.STL
         
         private STLFile STL;
 
-        public STLExtractor(string stlFileLocation, STLInfo.STLUnits units = STLInfo.STLUnits.Centimeters)
+        public STLExtractor(string stlFileLocation, STLInfo.STLUnits units = STLInfo.STLUnits.Centimeters, bool InhibitFullAnalysis = false)
         {
             if (File.Exists(stlFileLocation))
             {
                 ValidState = FileValidity.Valid;
                 IsValid = true;
-                try { STL = new STLFile(File.Open(stlFileLocation, FileMode.Open), units);  }
+                try { STL = new STLFile(File.Open(stlFileLocation, FileMode.Open), units, InhibitFullAnalysis);  }
                 catch (ArgumentNullException) { IsValid = false; ValidState = FileValidity.FileNameNull; }
                 catch (UnauthorizedAccessException) { IsValid = false; ValidState = FileValidity.UnauthorizedAccess; }
                 catch (ArgumentException) { IsValid = false; ValidState = FileValidity.InvalidFile; }
@@ -93,11 +89,14 @@ namespace RocketSimulator.STL
             private StreamReader reader;
             private long NumFacets;
 
-            public STLFile(FileStream fileStream, STLInfo.STLUnits units)
+            public bool InhibitFullAnalysis { get; private set; }
+
+            public STLFile(FileStream fileStream, STLInfo.STLUnits units, bool InhibitFullAnalysis = false)
             {
                 // Set vars
                 Surfaces = new List<Surface>();
                 Units = units;
+                this.InhibitFullAnalysis = InhibitFullAnalysis;
                 this.fileStream = fileStream;
                 reader = new StreamReader(fileStream);
 
@@ -161,12 +160,19 @@ namespace RocketSimulator.STL
                 Logging.Print("DECODING STL FILE...");
                 if (this.Type == STLInfo.STLType.ASCII) { GetASCIISurfaces(); }
                 else { GetBinarySurfaces(); }
-                timer.Start();
-                DetermineExteriorSurfaces();
-                timer.Stop();
-                TimeSpan timeSpan = timer.Elapsed;
-                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                Logging.Print("ANALYSIS TOOK: " + elapsedTime);
+                if (!InhibitFullAnalysis)
+                {
+                    timer.Start();
+                    DetermineExteriorSurfaces();
+                    timer.Stop();
+                    TimeSpan timeSpan = timer.Elapsed;
+                    string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                    Logging.Print("ANALYSIS TOOK: " + elapsedTime);
+                }
+                else
+                {
+                    Logging.Print("Exterior Surface Analysis Skipped.");
+                }
             }
 
             // Use ray tracing for determination
@@ -350,6 +356,7 @@ namespace RocketSimulator.STL
                 Vector3D<double> vX = new Vector3D<double>();
                 Vector3D<double> vY = new Vector3D<double>();
                 Vector3D<double> vZ = new Vector3D<double>();
+
                 for (long i = 0; i < NumFacets; i++)
                 {
                     fileStream.Read(facet, 0, STLInfo.STL_BIN_FACET_LENGTH);
