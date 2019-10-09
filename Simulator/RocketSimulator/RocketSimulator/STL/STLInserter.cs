@@ -10,7 +10,6 @@ namespace RocketSimulator.STL
 {
     public static class STLInserter
     {
-
         // Do units matter?
         public static bool CreateSTLFile(string filename, 
             List<Surface> surfaces, 
