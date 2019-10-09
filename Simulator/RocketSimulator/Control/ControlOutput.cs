@@ -4,7 +4,7 @@ namespace Control
 {
     public struct ControlOutput
     {
-        public Vector3D<double> Thrust;
+        public Vector3D<float> Thrust;
         public byte PyroOutputs;
     }
 }

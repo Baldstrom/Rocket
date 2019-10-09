@@ -9,14 +9,14 @@ namespace RocketSimulator.Parts
 {
     public class Surface
     {
-        public Vector3D<double> SurfaceArea { get; private set; }
-        public Vector3D<double> DragCoefficient { get; private set; }
-        public Vector3D<double> Position { get; private set; }
-        public List<Vector3D<double>> Vertices { get; private set; }
-        public Vector3D<double> Normal { get; private set; }
+        public Vector3D<float> SurfaceArea { get; private set; }
+        public Vector3D<float> DragCoefficient { get; private set; }
+        public Vector3D<float> Position { get; private set; }
+        public List<Vector3D<float>> Vertices { get; private set; }
+        public Vector3D<float> Normal { get; private set; }
         public bool IsExterior { get; set; }
 
-        public Surface(Vector3D<double> area, Vector3D<double> dragCoefficient) : this()
+        public Surface(Vector3D<float> area, Vector3D<float> dragCoefficient) : this()
         {
             this.SurfaceArea = area;
             this.DragCoefficient = dragCoefficient;
@@ -24,21 +24,24 @@ namespace RocketSimulator.Parts
 
         public Surface()
         {
-            this.Vertices = new List<Vector3D<double>>();
-            this.DragCoefficient = new Vector3D<double>();
-            this.Position = new Vector3D<double>();
-            this.Normal = new Vector3D<double>();
-            this.SurfaceArea = new Vector3D<double>();
+            this.Vertices = new List<Vector3D<float>>();
+            this.DragCoefficient = new Vector3D<float>();
+            this.Position = new Vector3D<float>();
+            this.Normal = new Vector3D<float>();
+            this.SurfaceArea = new Vector3D<float>();
         }
 
-        public void SetDragCoefficients(Vector3D<double> drag) { this.DragCoefficient = drag; }
-        public void SetSurfaceArea(Vector3D<double> surfaceArea) { this.SurfaceArea = surfaceArea; }
-        public void SetPosition(Vector3D<double> position) { this.Position = position; }
-        public void AddVertex(Vector3D<double> vertex) { this.Vertices.Add(vertex); }
-        public void SetNormal(Vector3D<double> normal) { this.Normal = normal; }
+        public void SetDragCoefficients(Vector3D<float> drag) { this.DragCoefficient = drag; }
+        public void SetSurfaceArea(Vector3D<float> surfaceArea) { this.SurfaceArea = surfaceArea; }
+        public void SetPosition(Vector3D<float> position) { this.Position = position; }
+        public void AddVertex(Vector3D<float> vertex) { this.Vertices.Add(vertex); }
+        public void SetNormal(Vector3D<float> normal) { this.Normal = normal; }
 
         public byte[] ToByteArray()
         {
+            throw new NotImplementedException();
+            // Tentative code
+            /*
             byte[] result = new byte[48];
 
             byte[] normal = new byte[12];
@@ -72,6 +75,7 @@ namespace RocketSimulator.Parts
             Buffer.BlockCopy(v3Float, 0, result, 36, 12);
 
             return result;
+            */
         }
 
     }
