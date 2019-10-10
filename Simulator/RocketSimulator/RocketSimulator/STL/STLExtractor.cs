@@ -49,9 +49,9 @@ namespace RocketSimulator.STL
             // Set configuration
             RocketConfiguration config = new RocketConfiguration()
             {
-                CenterOfMass = new Vector3D<double>(),
-                CenterOfPressure = new Vector3D<double>(),
-                CenterOfThrust = new Vector3D<double>(),
+                CenterOfMass = new Vector3D<float>(),
+                CenterOfPressure = new Vector3D<float>(),
+                CenterOfThrust = new Vector3D<float>(),
             };
             // Set surfaces
             
@@ -225,7 +225,7 @@ namespace RocketSimulator.STL
                 return false;
             }
 
-            private Vector3D<double> CollisionPoint(Surface surface1, Surface surface2, out int direction)
+            private Vector3D<float> CollisionPoint(Surface surface1, Surface surface2, out int direction)
             {
                 // We have all the information for a plane equation
                 // Plane equation given as: (N=normal vector) <x0, y0, z0> a point on plane. (p0)
@@ -254,12 +254,12 @@ namespace RocketSimulator.STL
                 // t = (dot(N, p0) - dot(N, p1)) / dot(N,diff)
                 
                 // t solved as follows:
-                double t = (surface2.Normal.Dot(surface1.Position) - surface2.Normal.Dot(surface2.Position)) / surface2.Normal.Dot(surface2.Normal);
+                float t = (surface2.Normal.Dot(surface1.Position) - surface2.Normal.Dot(surface2.Position)) / surface2.Normal.Dot(surface2.Normal);
                 direction = t >= 0 ? 1 : -1;
                 return surface2.Position.Add(surface2.Normal.Multiply(t));
             }
 
-            private bool PointOnSurface(Vector3D<double> point, Surface plane)
+            private bool PointOnSurface(Vector3D<float> point, Surface plane)
             {
                 bool inside = PointOnSameSide(point, plane.Vertices[0], plane.Vertices[1], plane.Vertices[2]);
                 inside &= PointOnSameSide(point, plane.Vertices[1], plane.Vertices[0], plane.Vertices[2]);
@@ -267,7 +267,7 @@ namespace RocketSimulator.STL
                 return inside;
             }
 
-            private bool PointOnSameSide(Vector3D<double> p1, Vector3D<double> p2, Vector3D<double> A, Vector3D<double> B)
+            private bool PointOnSameSide(Vector3D<float> p1, Vector3D<float> p2, Vector3D<float> A, Vector3D<float> B)
             {
                 return (B - A).Cross(p1 - A).Dot((B - A).Cross(p2 - A)) >= 0;
             }
@@ -276,8 +276,8 @@ namespace RocketSimulator.STL
                 Logging.Print("DETECTED ASCII STL");
 
                 string nextLine = ReadNextASCIILine();
-                Vector3D<double> normal = new Vector3D<double>();
-                Vector3D<double> curVertex = new Vector3D<double>();
+                Vector3D<float> normal = new Vector3D<float>();
+                Vector3D<float> curVertex = new Vector3D<float>();
                 float[] xyz = new float[3];
                 string[] str;
                 int curXYZ = 0;
@@ -343,7 +343,9 @@ namespace RocketSimulator.STL
                 if (!BitConverter.IsLittleEndian)
                 {
                     // TODO: Transpose bytes into big endian
+                    throw new NotImplementedException("BIG ENDIAN SYSTEMS NOT YET SUPPORTED.");
                 }
+
                 NumFacets = BitConverter.ToInt64(numFacets, 0);
 
                 if (NumFacets > MAX_BIN_STL_FACETS_PRINT_LOADING)
@@ -352,47 +354,49 @@ namespace RocketSimulator.STL
                 }
 
                 byte[] facet = new byte[STLInfo.STL_BIN_FACET_LENGTH];
-                Vector3D<double> normal = new Vector3D<double>();
-                Vector3D<double> vX = new Vector3D<double>();
-                Vector3D<double> vY = new Vector3D<double>();
-                Vector3D<double> vZ = new Vector3D<double>();
-
                 for (long i = 0; i < NumFacets; i++)
                 {
+                    // TODO: More efficient way to do this?
+                    Surface thisSurface = new Surface();
+                    Vector3D<float> normal = new Vector3D<float>();
+                    Vector3D<float> vX = new Vector3D<float>();
+                    Vector3D<float> vY = new Vector3D<float>();
+                    Vector3D<float> vZ = new Vector3D<float>();
+
                     fileStream.Read(facet, 0, STLInfo.STL_BIN_FACET_LENGTH);
                     if (!BitConverter.IsLittleEndian)
                     {
                         // TODO: Transpose to big endian
+                        throw new NotImplementedException("BIG ENDIAN SYSTEMS NOT YET SUPPORTED.");
                     }
 
                     // Normal
                     normal.X = BitConverter.ToSingle(facet, 0);
-                    normal.Y = BitConverter.ToSingle(facet, 4);
                     normal.Z = BitConverter.ToSingle(facet, 8);
+                    normal.Y = BitConverter.ToSingle(facet, 4);
                     // X
                     vX.X = BitConverter.ToSingle(facet, 12);
                     vX.Y = BitConverter.ToSingle(facet, 16);
                     vX.Z = BitConverter.ToSingle(facet, 20);
-                    // Y
+                    // Y                  
                     vY.X = BitConverter.ToSingle(facet, 24);
                     vY.Y = BitConverter.ToSingle(facet, 28);
                     vY.Z = BitConverter.ToSingle(facet, 32);
-                    // Z
+                    // Z                  
                     vZ.X = BitConverter.ToSingle(facet, 36);
                     vZ.Y = BitConverter.ToSingle(facet, 40);
                     vZ.Z = BitConverter.ToSingle(facet, 44);
                     // Byte Count (ignored, 2 bytes)
 
                     // Set surface
-                    Surface surface = new Surface();
-
-                    surface.SetNormal(normal);
-                    surface.AddVertex(vX);
-                    surface.AddVertex(vY);
-                    surface.AddVertex(vZ);
+                    thisSurface.SetNormal(normal);
+                    thisSurface.AddVertex(vX);
+                    thisSurface.AddVertex(vY);
+                    thisSurface.AddVertex(vZ);
 
                     // Add surface to list
-                    Surfaces.Add(surface);
+                    Surfaces.Add(thisSurface);
+
                     if (Logging.IsPercentageIndicatorOpen)
                     {
                         Logging.UpdatePercentageIndicator(i);
@@ -408,7 +412,7 @@ namespace RocketSimulator.STL
             /// Hopefully we do not need this.
             /// </summary>
             /// <returns></returns>
-            private Vector3D<double> GetPositionFromVertices()
+            private Vector3D<float> GetPositionFromVertices()
             {
                 throw new NotImplementedException();
             }

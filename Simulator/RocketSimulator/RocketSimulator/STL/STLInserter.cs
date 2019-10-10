@@ -90,9 +90,9 @@ namespace RocketSimulator.STL
             byte[] thisFaceBytes = new byte[50];
             foreach (Surface face in surfaces)
             {
-                normalFloat[0] = (float)face.Normal.X;
-                normalFloat[1] = (float)face.Normal.Y;
-                normalFloat[2] = (float)face.Normal.Z;
+                normalFloat[0] = face.Normal.X;
+                normalFloat[1] = face.Normal.Y;
+                normalFloat[2] = face.Normal.Z;
 
                 Buffer.BlockCopy(BitConverter.GetBytes(normalFloat[0]), 0, normal, 0, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(normalFloat[1]), 0, normal, 4, 4);
@@ -100,9 +100,9 @@ namespace RocketSimulator.STL
 
                 Buffer.BlockCopy(normal, 0, result, 0, 12);
 
-                v1Float[0] = (float)face.Vertices[0].X;
-                v1Float[1] = (float)face.Vertices[0].Y;
-                v1Float[2] = (float)face.Vertices[0].Z;
+                v1Float[0] = face.Vertices[0].X;
+                v1Float[1] = face.Vertices[0].Y;
+                v1Float[2] = face.Vertices[0].Z;
 
                 Buffer.BlockCopy(BitConverter.GetBytes(v1Float[0]), 0, v1, 0, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(v1Float[1]), 0, v1, 4, 4);
@@ -110,9 +110,9 @@ namespace RocketSimulator.STL
 
                 Buffer.BlockCopy(v1, 0, result, 12, 12);
 
-                v2Float[0] = (float)face.Vertices[1].X;
-                v2Float[1] = (float)face.Vertices[1].Y;
-                v2Float[2] = (float)face.Vertices[1].Z;
+                v2Float[0] = face.Vertices[1].X;
+                v2Float[1] = face.Vertices[1].Y;
+                v2Float[2] = face.Vertices[1].Z;
 
                 Buffer.BlockCopy(BitConverter.GetBytes(v2Float[0]), 0, v2, 0, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(v2Float[1]), 0, v2, 4, 4);
@@ -120,9 +120,9 @@ namespace RocketSimulator.STL
 
                 Buffer.BlockCopy(v2, 0, result, 24, 12);
 
-                v3Float[0] = (float)face.Vertices[2].X;
-                v3Float[1] = (float)face.Vertices[2].Y;
-                v3Float[2] = (float)face.Vertices[2].Z;
+                v3Float[0] = face.Vertices[2].X;
+                v3Float[1] = face.Vertices[2].Y;
+                v3Float[2] = face.Vertices[2].Z;
 
                 Buffer.BlockCopy(BitConverter.GetBytes(v3Float[0]), 0, v3, 0, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(v3Float[1]), 0, v3, 4, 4);

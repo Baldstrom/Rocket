@@ -126,9 +126,9 @@ namespace RocketSimulator
             SensorUpdate newSense = new SensorUpdate();
 
             // Calculate Acceleration Vectors
-            Vector3D<double> accel = new Vector3D<double>();
-            Vector3D<double> velocity = new Vector3D<double>();
-            Vector3D<double> dragForce = new Vector3D<double>();
+            Vector3D<float> accel = new Vector3D<float>();
+            Vector3D<float> velocity = new Vector3D<float>();
+            Vector3D<float> dragForce = new Vector3D<float>();
             // Compute drag force
             velocity = accel.Multiply(Time.FLIGHT_RESOLUTION);
             // dragForce = Cd * p * v^2 / 2 * A
@@ -157,9 +157,9 @@ namespace RocketSimulator
         {
             Rocket.RocketConfiguration config = new Rocket.RocketConfiguration() 
             {
-                CenterOfMass = new Vector3D<double>     (0.0f, 0.0f, 0.0f),
-                CenterOfPressure = new Vector3D<double> (0.0f, 0.0f, 0.0f),
-                CenterOfThrust = new Vector3D<double>   (0.0f, 0.0f, 0.0f),
+                CenterOfMass = new Vector3D<float>     (0.0f, 0.0f, 0.0f),
+                CenterOfPressure = new Vector3D<float> (0.0f, 0.0f, 0.0f),
+                CenterOfThrust = new Vector3D<float>   (0.0f, 0.0f, 0.0f),
             };
             Rocket rocket = new Rocket(config);
             return rocket;
@@ -169,7 +169,7 @@ namespace RocketSimulator
         {
             ControlOutput initialControl = new ControlOutput
             {
-                Thrust = new Vector3D<double>(0, 0, 0),
+                Thrust = new Vector3D<float>(0, 0, 0),
                 PyroOutputs = 0x00
             };
             return initialControl;
@@ -185,7 +185,7 @@ namespace RocketSimulator
                 RotX = 0, // deg/S
                 RotY = 0, // deg/S
                 RotZ = 0, // deg/S
-                BarometricPressure = 101.325, // kPa
+                BarometricPressure = 101.325f, // kPa
             };
         }
         

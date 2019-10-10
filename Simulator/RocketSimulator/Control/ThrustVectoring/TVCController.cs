@@ -5,9 +5,9 @@ namespace Control.ThrustVectoring
 {
     public class TVCController
     {
-        public Vector3D<double> Tick(SensorUpdate sensors, FlightState flightState)
+        public Vector3D<float> Tick(SensorUpdate sensors, FlightState flightState)
         {
-            return new Vector3D<double>();
+            return new Vector3D<float>();
         }
     }
 }
