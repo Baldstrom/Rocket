@@ -22,8 +22,8 @@ namespace RocketSimulator.CommandLine
         /// Parses input as a string array into CLIAction objects to be invoked.
         /// </summary>
         /// <param name="commandLineInput"> Input CLI arguments from user. </param>
-        /// <returns> A set of all CLI actions to be considered during runtime. </returns>
-        public HashSet<CLIAction> GetActions(string[] commandLineInput)
+        /// <returns> A list of all CLI actions to be considered during runtime. </returns>
+        public List<CLIAction> GetActions(string[] commandLineInput)
         {
             throw new NotImplementedException();
         }
