@@ -70,6 +70,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLine\CLIActionModifier.cs" />
+    <Compile Include="CommandLine\CLIActionType.cs" />
+    <Compile Include="CommandLine\ArgParser.cs" />
+    <Compile Include="CommandLine\CLIAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -99,7 +103,12 @@
       <Name>Control</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logging\" />
+    <Folder Include="RayTracing\" />
+    <Folder Include="RocketParts\" />
+    <Folder Include="STL\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.6.1.0\build\StyleCop.MSBuild.targets" Condition="Exists('..\packages\StyleCop.MSBuild.6.1.0\build\StyleCop.MSBuild.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

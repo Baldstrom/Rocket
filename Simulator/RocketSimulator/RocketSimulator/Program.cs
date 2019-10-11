@@ -20,7 +20,7 @@ namespace RocketSimulator
         /// Parses command line arguments and arbitrates commands from the user
         /// to the simulator.
         /// </summary>
-        /// <param name="args">Command line arguments passed in by user.</param>
+        /// <param name="args"> Command line arguments passed in by user. </param>
         public static void Main(string[] args)
         {
         }
