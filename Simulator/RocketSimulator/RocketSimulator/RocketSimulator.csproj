@@ -70,22 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLI\ArgParser.cs" />
-    <Compile Include="CLI\CSVExport.cs" />
-    <Compile Include="Environment\MaxEnvironmentalConditions.cs" />
-    <Compile Include="Environment\Wind.cs" />
-    <Compile Include="CLI\Logging.cs" />
-    <Compile Include="CLI\LoadingBar.cs" />
-    <Compile Include="Parts\Rocket.cs" />
-    <Compile Include="Parts\RocketMotor.cs" />
-    <Compile Include="Parts\Surface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="STL\STLExtractor.cs" />
-    <Compile Include="STL\STLInfo.cs" />
-    <Compile Include="STL\STLInserter.cs" />
-    <Compile Include="RuntimeTests\TestLoadingBar.cs" />
-    <Compile Include="RuntimeTests\TestProtocol.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -122,4 +108,5 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\StyleCop.MSBuild.6.1.0\build\StyleCop.MSBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.6.1.0\build\StyleCop.MSBuild.targets'))" />
   </Target>
+  <!--<Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.targets" />-->
 </Project>
