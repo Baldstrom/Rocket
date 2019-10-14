@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPHASim", "ALPHASim\ALPHAS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulatorUI", "SimulatorUI\SimulatorUI.csproj", "{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocketSimulatorTests", "RocketSimulatorTests\RocketSimulatorTests.csproj", "{DBEE5849-235F-415F-A5B4-77F797A1FA4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BuildAll|Any CPU = BuildAll|Any CPU
@@ -42,6 +44,12 @@ Global
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E51AA8B-B848-41FF-8DAB-CB7C4BAE326B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.BuildAll|Any CPU.ActiveCfg = Release|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.BuildAll|Any CPU.Build.0 = Release|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBEE5849-235F-415F-A5B4-77F797A1FA4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

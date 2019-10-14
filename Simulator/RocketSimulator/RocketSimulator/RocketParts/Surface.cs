@@ -64,6 +64,7 @@ namespace RocketSimulator.RocketParts
         /// <param name="polygonOrder"> The order of the polygon. </param>
         public void FindSurfaceArea(SurfacePolygonOrder polygonOrder = SurfacePolygonOrder.ThreeSide)
         {
+            throw new NotImplementedException();
         }
 
         /// <summary>
