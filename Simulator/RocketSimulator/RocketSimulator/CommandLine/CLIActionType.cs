@@ -56,5 +56,12 @@ namespace RocketSimulator.CommandLine
         /// Defines the WritebackExterior.
         /// </summary>
         WritebackExterior,
+
+        /// <summary>
+        /// Defines the Help CLIActionType
+        /// If help invoked, a help query should
+        /// arise.
+        /// </summary>
+        Help,
     }
 }

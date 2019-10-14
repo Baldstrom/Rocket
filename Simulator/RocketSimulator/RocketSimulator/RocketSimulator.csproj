@@ -75,6 +75,7 @@
     <Compile Include="CommandLine\ArgParser.cs" />
     <Compile Include="CommandLine\CLIAction.cs" />
     <Compile Include="CommandLine\CLIDelegates.cs" />
+    <Compile Include="CommandLine\CLIHelp.cs" />
     <Compile Include="Logging\LoadingBar.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Program.cs" />
