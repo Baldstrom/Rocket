@@ -79,10 +79,11 @@
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RayTracing\Ray.cs" />
     <Compile Include="RocketParts\Motor.cs" />
     <Compile Include="RocketParts\Rocket.cs" />
     <Compile Include="RocketParts\Surface.cs" />
-    <Compile Include="RayTracing\DetermineExteriorSurfaces.cs" />
+    <Compile Include="RayTracing\ExteriorSurfaceAnalyzer.cs" />
     <Compile Include="STL\STLFile.cs" />
     <Compile Include="STL\STLParse.cs" />
   </ItemGroup>

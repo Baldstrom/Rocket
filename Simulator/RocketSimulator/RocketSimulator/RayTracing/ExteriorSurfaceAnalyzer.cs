@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Module Name: DetermineExteriorSurfaces.cs
+/// Module Name: ExteriorSurfaceAnalyzer.cs
 /// Project: RocketSimulator
 /// Nikobotics Software
 ///
@@ -21,7 +21,13 @@ namespace RocketSimulator.RayTracing
     /// Contains structure to determine exterior surfaces and
     /// their properties.
     /// </summary>
-    public static class DetermineExteriorSurfaces
+    public class ExteriorSurfaceAnalyzer
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="ExteriorSurfaceAnalyzer"/> class.
+        /// </summary>
+        public ExteriorSurfaceAnalyzer()
+        {
+        }
     }
 }
