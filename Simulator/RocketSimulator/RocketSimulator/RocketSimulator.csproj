@@ -86,6 +86,7 @@
     <Compile Include="RocketParts\Surface.cs" />
     <Compile Include="RayTracing\ExteriorSurfaceAnalyzer.cs" />
     <Compile Include="STL\STLFile.cs" />
+    <Compile Include="STL\STLInsert.cs" />
     <Compile Include="STL\STLParse.cs" />
   </ItemGroup>
   <ItemGroup>
