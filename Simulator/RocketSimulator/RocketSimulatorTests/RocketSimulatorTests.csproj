@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RayTracing\RayTests.cs" />
     <Compile Include="RocketParts\SurfaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
