@@ -71,7 +71,69 @@ namespace RocketSimulator.RocketParts.Tests
         [TestMethod]
         public void FindSurfaceAreaTest()
         {
-            // FindSurfaceArea() not implemented yet, so neither are the tests.
+            Surface surfaceUnderTest = SurfaceTests.TestUnitSurfaceFactory(4);
+
+            // Check the surface area in 2D
+            surfaceUnderTest.FindSurfaceArea(Surface.SurfacePolygonOrder.OneVertex);
+            Assert.AreEqual(0.0f, surfaceUnderTest.SurfaceArea, float.Epsilon);
+
+            surfaceUnderTest.FindSurfaceArea(Surface.SurfacePolygonOrder.TwoVertex);
+            Assert.AreEqual(0.0f, surfaceUnderTest.SurfaceArea, float.Epsilon);
+
+            Assert.ThrowsException<NotImplementedException>(
+                delegate 
+                {
+                    surfaceUnderTest.FindSurfaceArea(Surface.SurfacePolygonOrder.ThreeVertex);
+                });
+
+            Assert.ThrowsException<NotImplementedException>(
+                delegate
+                {
+                    surfaceUnderTest.FindSurfaceArea(Surface.SurfacePolygonOrder.FourVertex);
+                });
+
+            Assert.ThrowsException<ArgumentException>(
+                delegate
+                {
+                    // Test some random number as an enumeration
+                    surfaceUnderTest.FindSurfaceArea((Surface.SurfacePolygonOrder)0x72);
+                });
+        }
+
+        /// <summary>
+        /// Generates a unit surface with given number of vertices.
+        /// </summary>
+        /// <param name="vertices"> Number of vertices to add to Surface. </param>
+        /// <returns> A surface with given number of vertices. </returns>
+        private static Surface TestUnitSurfaceFactory(int vertices = 1)
+        {
+            // Create surface and populate
+            Surface surfaceUnderTest = new Surface();
+            for (int i = 0; i < vertices; i++)
+            {
+                surfaceUnderTest.AddVertex(1.0f, 1.0f, 1.0f);
+            }
+
+            return surfaceUnderTest;
+        }
+
+        /// <summary>
+        /// Generates a surface with vertices corresponding to a unit square.
+        /// (All side lengths = 1.0f).
+        /// </summary>
+        /// <returns> A unit square surface. </returns>
+        private static Surface TestUnitSquareFactory()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Generates a random valid surface with certain number of vertices.
+        /// </summary>
+        /// <param name="vertices"> Number of vertices to give surface. </param>
+        /// <returns> A new surface object with given number of vertices. </returns>
+        private static Surface RandomTestSurfaceFactory(int vertices = 1)
+        {
             throw new NotImplementedException();
         }
     }

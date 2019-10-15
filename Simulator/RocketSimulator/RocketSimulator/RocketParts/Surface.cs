@@ -61,9 +61,56 @@ namespace RocketSimulator.RocketParts
         /// Finds the surface area of the surface polygon given the order of
         /// the polygon. 
         /// </summary>
+        /// <exception cref="ArgumentException"> If polygonOrder cannot be interpreted. </exception>
         /// <param name="polygonOrder"> The order of the polygon. </param>
-        public void FindSurfaceArea(SurfacePolygonOrder polygonOrder = SurfacePolygonOrder.ThreeSide)
+        public void FindSurfaceArea(SurfacePolygonOrder polygonOrder = SurfacePolygonOrder.ThreeVertex)
         {
+            // Switch on the order of the polygon
+            switch (polygonOrder)
+            {
+                case SurfacePolygonOrder.OneVertex:
+                case SurfacePolygonOrder.TwoVertex:
+                    // If it doesn't have at least 3 sides, there is no surface area.
+                    this.SurfaceArea = 0.0f;
+                    break;
+                case SurfacePolygonOrder.ThreeVertex:
+                    this.SurfaceArea = Surface.FindSurfaceAreaThreeVertex(this);
+                    break;
+                case SurfacePolygonOrder.FourVertex:
+                    this.SurfaceArea = Surface.FindSurfaceAreaFourVertex(this);
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        /// <summary>
+        /// Finds the surface area of a surface using the first
+        /// three vertices in it's vertex list.
+        /// </summary>
+        /// <param name="surface"> The surface to calculate surface area of. </param>
+        /// <exception cref="ArgumentException"> If surface contains fewer than 3 vertices. </exception>
+        /// <returns> Surface area of given surface. </returns>
+        private static float FindSurfaceAreaThreeVertex(Surface surface)
+        {
+            // Check if the vertex count is high enough.
+            if (surface.Vertices.Count < 3) { throw new ArgumentException(); }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Find the surface area of a surface using the first
+        /// four vertices in it's vertex list.
+        /// </summary>
+        /// <param name="surface"> The surface to calculate surface area of. </param>
+        /// <exception cref="ArgumentException"> If surface contains fewer than 4 vertices. </exception>
+        /// <returns> Surface area of given surface. </returns>
+        private static float FindSurfaceAreaFourVertex(Surface surface)
+        {
+            // Check if the vertex count is high enough
+            if (surface.Vertices.Count < 4) { throw new ArgumentException(); }
+
             throw new NotImplementedException();
         }
 
@@ -72,10 +119,10 @@ namespace RocketSimulator.RocketParts
         /// </summary>
         public enum SurfacePolygonOrder
         {
-            OneSide,
-            TwoSide,
-            ThreeSide,
-            FourSide,
+            OneVertex,
+            TwoVertex,
+            ThreeVertex,
+            FourVertex,
         }
     }
 }

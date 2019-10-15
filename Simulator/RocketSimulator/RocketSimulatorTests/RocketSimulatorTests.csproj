@@ -64,11 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALPHASim\ALPHASim.csproj">
-      <Project>{58FC701B-CB4E-4C8A-89BA-FA41963DC6F5}</Project>
+      <Project>{58fc701b-cb4e-4c8a-89ba-fa41963dc6f5}</Project>
       <Name>ALPHASim</Name>
     </ProjectReference>
     <ProjectReference Include="..\RocketSimulator\RocketSimulator.csproj">
-      <Project>{1783A25E-A8B8-4E5F-88DC-C33EC64E8570}</Project>
+      <Project>{1783a25e-a8b8-4e5f-88dc-c33ec64e8570}</Project>
       <Name>RocketSimulator</Name>
     </ProjectReference>
   </ItemGroup>
