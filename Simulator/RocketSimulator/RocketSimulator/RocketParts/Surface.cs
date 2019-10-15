@@ -23,6 +23,9 @@ namespace RocketSimulator.RocketParts
     /// </summary>
     public class Surface
     {
+        /// <summary> Maximum number of vertices possibly contained in a Surface. </summary>
+        public const int NUM_VERTICES_MAX = 4;
+
         /// <summary> Normal vector to surface of plane. </summary>
         public Vector3D<float> Normal { get; private set; } 
 
@@ -43,6 +46,9 @@ namespace RocketSimulator.RocketParts
 
         /// <summary> Adds a vertex to the polygon. </summary>
         /// <param name="newVertex"> The vertext to add. </param>
+        /// <exception cref="ArgumentException">
+        /// If you have added more vertices than the max number of vertices allowable. 
+        /// </exception>
         public void AddVertex(Vector3D<float> newVertex)
         {
             this.Vertices.Add(newVertex);
@@ -52,9 +58,19 @@ namespace RocketSimulator.RocketParts
         /// <param name="x"> X Coordinate of vertex. </param>
         /// <param name="y"> Y Coordinate of vertex. </param>
         /// <param name="z"> Z Coordinate of vertex. </param>
+        /// <exception cref="ArgumentException"> 
+        /// If you have added more vertices than the max number of vertices allowable. 
+        /// </exception>
         public void AddVertex(float x, float y, float z)
         {
-            this.AddVertex(new Vector3D<float>(x, y, z));
+            if (this.Vertices.Count < NUM_VERTICES_MAX)
+            {
+                this.AddVertex(new Vector3D<float>(x, y, z));
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         /// <summary>

@@ -62,6 +62,19 @@ namespace RocketSimulator.RocketParts.Tests
             Assert.AreEqual(0.1f, surfaceUnderTest.Vertices[2].X, float.Epsilon);
             Assert.AreEqual(0.2f, surfaceUnderTest.Vertices[2].Y, float.Epsilon);
             Assert.AreEqual(0.3f, surfaceUnderTest.Vertices[2].Z, float.Epsilon);
+
+            surfaceUnderTest = new Surface();
+            for (int i = 0; i < Surface.NUM_VERTICES_MAX; i++)
+            {
+                surfaceUnderTest.AddVertex(0.0f, 0.0f, 0.0f);
+            }
+
+            Assert.AreEqual(Surface.NUM_VERTICES_MAX, surfaceUnderTest.Vertices.Count);
+            Assert.ThrowsException<ArgumentException>(
+                delegate 
+                {
+                    surfaceUnderTest.AddVertex(0.0f, 0.0f, 0.0f);
+                });
         }
 
         /// <summary>
@@ -119,22 +132,41 @@ namespace RocketSimulator.RocketParts.Tests
 
         /// <summary>
         /// Generates a surface with vertices corresponding to a unit square.
-        /// (All side lengths = 1.0f).
+        /// (All side lengths and surface area = 1.0f).
         /// </summary>
         /// <returns> A unit square surface. </returns>
         private static Surface TestUnitSquareFactory()
         {
-            throw new NotImplementedException();
+            Surface surfaceUnderTest = new Surface();
+            surfaceUnderTest.AddVertex(0.0f, 0.0f, 0.0f);
+            surfaceUnderTest.AddVertex(1.0f, 0.0f, 0.0f);
+            surfaceUnderTest.AddVertex(0.0f, 1.0f, 0.0f);
+            surfaceUnderTest.AddVertex(1.0f, 1.0f, 0.0f);
+            return surfaceUnderTest;
         }
 
         /// <summary>
         /// Generates a random valid surface with certain number of vertices.
         /// </summary>
         /// <param name="vertices"> Number of vertices to give surface. </param>
+        /// <param name="magnitude"> Max value of vertex XYZ coordinates. </param>
         /// <returns> A new surface object with given number of vertices. </returns>
-        private static Surface RandomTestSurfaceFactory(int vertices = 1)
+        private static Surface RandomTestSurfaceFactory(int vertices = 1, float magnitude = 1.0f)
         {
-            throw new NotImplementedException();
+            Random randomObj = new Random();
+            Surface surfaceUnderTest = new Surface();
+            float randomX;
+            float randomY;
+            float randomZ;
+            for (int i =0; i < vertices; i++)
+            {
+                randomX = (float)randomObj.NextDouble() * magnitude;
+                randomY = (float)randomObj.NextDouble() * magnitude;
+                randomZ = (float)randomObj.NextDouble() * magnitude;
+                surfaceUnderTest.AddVertex(randomX, randomY, randomZ);
+            }
+
+            return surfaceUnderTest;
         }
     }
 }
