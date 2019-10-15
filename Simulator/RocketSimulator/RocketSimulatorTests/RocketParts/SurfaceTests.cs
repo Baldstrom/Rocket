@@ -158,7 +158,7 @@ namespace RocketSimulator.RocketParts.Tests
             float randomX;
             float randomY;
             float randomZ;
-            for (int i =0; i < vertices; i++)
+            for (int i = 0; i < vertices; i++)
             {
                 randomX = (float)randomObj.NextDouble() * magnitude;
                 randomY = (float)randomObj.NextDouble() * magnitude;
