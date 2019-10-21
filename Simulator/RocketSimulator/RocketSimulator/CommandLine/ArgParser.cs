@@ -14,6 +14,12 @@ namespace RocketSimulator.CommandLine
     using System.Collections.Generic;
 
     /// <summary>
+    /// Standard action delegate for a CLIAction.
+    /// </summary>
+    /// <param name="action"> Action for delegate to invoke. </param>
+    public delegate void CLIDelegatePrototype(CLIAction action);
+
+    /// <summary>
     /// Parses arguments from the user and interprets them as CLIActions.
     /// </summary>
     public class ArgParser
@@ -26,6 +32,31 @@ namespace RocketSimulator.CommandLine
         public List<CLIAction> GetActions(string[] commandLineInput)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Invokes given actions through a Delegate system
+        /// </summary>
+        /// <param name="actions"></param>
+        public void InvokeActions(List<CLIAction> actions)
+        {
+            CLIDelegates.DoCLIActions(actions);
+        }
+
+        /// <summary>
+        /// Invokes given actions as command line arguments.
+        /// Attempts conversion between CLI arguements and
+        /// CLIActions.
+        /// </summary>
+        /// <param name="commandLineInput"> Input CLI Arguemnts from user. </param>
+        public void InvokeActions(string[] commandLineInput)
+        {
+            this.InvokeActions(this.GetActions(commandLineInput));
+        }
+
+        public void AddDelegate(CLIActionType delegateTarget, CLIDelegatePrototype delegateCLI)
+        {
+            CLIDelegates.AddDelegate(delegateTarget, delegateCLI);
         }
     }
 }

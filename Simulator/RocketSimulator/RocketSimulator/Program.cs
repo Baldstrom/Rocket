@@ -10,6 +10,8 @@
 /// </summary>
 namespace RocketSimulator
 {
+    using RocketSimulator.CommandLine;
+
     /// <summary>
     /// Main class for simulator program. Contains entry point and entry point
     /// only.
@@ -23,6 +25,11 @@ namespace RocketSimulator
         /// <param name="args"> Command line arguments passed in by user. </param>
         public static void Main(string[] args)
         {
+            // Invoke argument actions.
+            ArgParser primaryArgumentParser = new ArgParser();
+            primaryArgumentParser.InvokeActions(args);
+
+
         }
     }
 }
