@@ -28,6 +28,9 @@ namespace RocketSimulator.CommandLine
         /// </summary>
         public HashSet<CLIActionModifier> ActionModifiers { get; private set; }
 
+        /// <summary> Contains action value. Never used outside get/set of ActionValue. </summary>
+        private object _ActionValue;
+
         /// <summary>
         /// Gets or sets the ActionValue.
         /// Action value if required. Null by default. Non-overwrite-able.
@@ -36,14 +39,14 @@ namespace RocketSimulator.CommandLine
         {
             get
             {
-                return this.ActionValue;
+                return this._ActionValue;
             }
 
             set
             {
-                if (this.ActionValue == null) 
+                if (this._ActionValue == null) 
                 { 
-                    this.ActionValue = value;
+                    this._ActionValue = value;
                 }
             }
         }

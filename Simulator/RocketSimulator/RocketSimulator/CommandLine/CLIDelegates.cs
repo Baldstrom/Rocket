@@ -104,10 +104,6 @@ namespace RocketSimulator.CommandLine
                 if (success)
                 {
                     thesePrototypes.Add(prototype);
-                    // TODO: Determine if these lines are necessary
-                    // I.E. Does adding above add to the reference within the dictionary?
-                    CLIDelegates.delegates.Remove(actionTarget);
-                    CLIDelegates.delegates.Add(actionTarget, thesePrototypes);
                 }
                 else { throw new Exception(); }
             }
