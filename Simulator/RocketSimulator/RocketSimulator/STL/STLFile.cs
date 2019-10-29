@@ -21,5 +21,37 @@ namespace RocketSimulator.STL
     /// </summary>
     public class STLFile
     {
+        public STLFileType Type { get; private set; }
+
+        /// <summary>
+        /// TODO: Describe initialization of STLFile object.
+        /// </summary>
+        public STLFile(string filename, STLFileOperationMode operatingMode) 
+        {
+            
+        }
+
+        public byte[] GetHeaderAsBytes() 
+        {
+            
+        }
+
+        public string GetHeaderAsASCII() 
+        {
+
+        }
+    }
+
+    public enum STLFileOperationMode 
+    {
+        CREATE_NEW,
+        ENSURE_EXISTS,
+        GET_EXISTING,
+    }
+
+    public enum STLFileType 
+    {
+        BINARY,
+        ASCII,
     }
 }
