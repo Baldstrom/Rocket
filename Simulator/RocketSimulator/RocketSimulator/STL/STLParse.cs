@@ -20,7 +20,14 @@ namespace RocketSimulator.STL
     /// <summary>
     /// Contains functionality to parse an STL file into a rocket.
     /// </summary>
-    public static class STLParse
+    public class STLParse
     {
+        /// <summary>
+        /// Initilizes an object to remove the 
+        /// </summary>
+        public STLParse(STLFile file) 
+        {
+
+        }
     }
 }
