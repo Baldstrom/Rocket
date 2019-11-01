@@ -29,7 +29,7 @@ namespace RocketSimulator.RayTracing
         /// <summary> Direction of ray. </summary>
         public Vector3D<float> Direction { get; private set; }
 
-        /// <summary> Angle of position relative to YZ axis. </summary>
+        /// <summary> Angle of position relative to YZ axis. Radians. </summary>
         public float Theta
         {
             get
@@ -41,7 +41,7 @@ namespace RocketSimulator.RayTracing
             set { this.Theta = value; }
         }
 
-        /// <summary> Angle of position relative to XY axis. </summary>
+        /// <summary> Angle of position relative to XY axis. Radians. </summary>
         public float Phi
         {
             get
@@ -74,6 +74,7 @@ namespace RocketSimulator.RayTracing
         /// <summary>
         /// Returns a ray with position vector offset from the reference Ray by dtheta and dphi.
         /// The new direction vector will point to the anchor position.
+        /// Preserves position vector magnitude.
         /// </summary>
         /// <param name="reference"> The ray to reference the change of angles from. </param>
         /// <param name="anchor"> The position that the new Ray's direction vector will point to. </param>
@@ -82,7 +83,24 @@ namespace RocketSimulator.RayTracing
         /// <returns> A ray with a 3D angle offset (theta, phi) from the reference ray. </returns>
         public static Ray RayFromAngleOffset(Ray reference, Vector3D<float> anchor, float dtheta, float dphi)
         {
-            throw new NotImplementedException();
+            // Calculate new position vector.
+            Vector3D<float> newDirection;
+            Vector3D<float> newPosition = new Vector3D<float>();
+
+            float newPhi = reference.Phi + dphi;
+            float newTheta = reference.Theta + dtheta;
+            float d = reference.Position.Magnitude() * (float)Math.Cos(newTheta);
+
+            newPosition.X = d * (float)Math.Cos(newPhi);
+            newPosition.Y = d * (float)Math.Sin(newPhi);
+            newPosition.Z = reference.Position.Magnitude() * (float)Math.Sin(newTheta);
+
+            // Calculate lambda from new position
+            float lambda_inv = 1.0f / Ray.DistanceOf(newPosition, anchor);
+            // Direction = 1/lambda * A - 1/lambda * position
+            newDirection = new Vector3D<float>().Add(newPosition.Multiply(lambda_inv)).Subtract(anchor.Multiply(lambda_inv));
+
+            return new Ray(newPosition, newDirection);
         }
 
         /// <summary>
@@ -106,6 +124,7 @@ namespace RocketSimulator.RayTracing
         {
             if (!this.thetaSet)
             {
+                this.Theta = (float)Math.Atan2(this.Position.Z, this.Position.Y);
             }
 
             this.thetaSet = true;
@@ -120,10 +139,27 @@ namespace RocketSimulator.RayTracing
         {
             if (!this.phiSet)
             {
+                this.Phi = (float)Math.Atan2(this.Position.Y, this.Position.X);
             }
 
             this.phiSet = true;
             return this.Phi;
         }
+
+        /// <summary>
+        /// Gets the distance between the tips of two vectors.
+        /// </summary>
+        /// <param name="vector1"> A vector. </param>
+        /// <param name="vector2"> A vector. </param>
+        /// <returns> Distance between vector1 and vector2. </returns>
+        private static float DistanceOf(Vector3D<float> vector1, Vector3D<float> vector2)
+        {
+            float rootOf = (float)Math.Pow(vector1.X - vector2.X, 2);
+            rootOf += (float)Math.Pow(vector1.Y - vector2.Y, 2);
+            rootOf += (float)Math.Pow(vector1.Z - vector2.Z, 2);
+
+            return (float)Math.Sqrt(rootOf);
+        }
+
     }
 }
