@@ -35,10 +35,10 @@ namespace RocketSimulator.RayTracing
             get
             {
                 if (!this.thetaSet) { return this.GetTheta(); }
-                else { return this.Theta; }
+                else { return this.mTheta; }
             }
 
-            set { this.Theta = value; }
+            set { this.mTheta = value; }
         }
 
         /// <summary> Angle of position relative to XY axis. Radians. </summary>
@@ -47,11 +47,17 @@ namespace RocketSimulator.RayTracing
             get
             {
                 if (!this.phiSet) { return this.GetPhi(); }
-                else { return this.Phi; }
+                else { return this.mPhi; }
             }
 
-            set { this.Phi = value; }
+            set { this.mPhi = value; }
         }
+
+        /// <summary> Temporary variables for Phi/Theta. Not to be used by anything other than get/set. </summary>
+        private float mTheta;
+
+        /// <summary> Temporary variables for Phi/Theta. Not to be used by anything other than get/set. </summary>
+        private float mPhi;
 
         /// <summary> True if theta is set. </summary>
         private bool thetaSet;
@@ -68,7 +74,7 @@ namespace RocketSimulator.RayTracing
         public Ray(Vector3D<float> position, Vector3D<float> direction)
         {
             this.Position = position;
-            this.Direction = direction;
+            this.Direction = direction.Normalize();
         }
 
         /// <summary>
@@ -108,8 +114,8 @@ namespace RocketSimulator.RayTracing
         /// The new direction vector will point to the anchor position.
         /// </summary>
         /// <param name="anchor"> The position that the new Ray's direction vector will point to. </param>
-        /// <param name="dtheta"> The change in angle of theta between the reference ray and the new ray. </param>
-        /// <param name="dphi"> The change angle of phi between the reference ray and the new ray. </param>
+        /// <param name="dtheta"> The change in angle of theta between the reference ray and the new ray. Radians. </param>
+        /// <param name="dphi"> The change angle of phi between the reference ray and the new ray. Radians. </param>
         /// <returns> A ray with a 3D angle offset (theta, phi) from this ray. </returns>
         public Ray RayFromAngleOffset(Vector3D<float> anchor, float dtheta, float dphi)
         {
@@ -159,6 +165,26 @@ namespace RocketSimulator.RayTracing
             rootOf += (float)Math.Pow(vector1.Z - vector2.Z, 2);
 
             return (float)Math.Sqrt(rootOf);
+        }
+
+        /// <summary>
+        /// Returns degrees of angle in radians.
+        /// </summary>
+        /// <param name="radians"> Angle in radians. </param>
+        /// <returns> Angle in degrees. </returns>
+        public static float RadiansToDegrees(float radians)
+        {
+            return radians * 180.0f / (float) Math.PI;
+        }
+
+        /// <summary>
+        /// Returns radians of angle in degrees.
+        /// </summary>
+        /// <param name="degrees"> Angle in degrees. </param>
+        /// <returns> Angle in radians. </returns>
+        public static float DegreesToRadians(float degrees)
+        {
+            return degrees * (float) Math.PI / 180.0f;
         }
 
     }

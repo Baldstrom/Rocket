@@ -109,7 +109,7 @@ namespace ALPHASim.SimMath
         public Vector3D<T> Normalize()
         {
             dynamic mag = Math.Sqrt((this.Xd * this.Xd) + (this.Yd * this.Yd) + (this.Zd * this.Zd));
-            return new Vector3D<T>((T)this.Xd / mag, (T)this.Yd / mag, (T)this.Zd / mag);
+            return new Vector3D<T>((T)(this.Xd / mag), (T)(this.Yd / mag), (T)(this.Zd / mag));
         }
 
         public T Magnitude()
