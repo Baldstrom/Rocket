@@ -39,7 +39,7 @@ namespace RocketSimulator.RayTracing.Tests
                 rut = new Ray(testPosition, testDirection);
 
                 Assert.AreEqual(testPosition, rut.Position);
-                Assert.AreEqual(testDirection, rut.Direction);
+                Assert.AreEqual(testDirection.Normalize(), rut.Direction.Normalize());
             }
         }
 
