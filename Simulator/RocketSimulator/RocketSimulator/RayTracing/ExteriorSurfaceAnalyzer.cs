@@ -105,6 +105,7 @@ namespace RocketSimulator.RayTracing
                     for (int i = 0; i < queueCount; i++)
                     {
                         Surface testSurface = helper.Dequeue();
+                        // Need to arbirate between exterior and interior surfaces
                         if (!testSurface.RayCollides(testRay))
                         {
                             helper.Enqueue(testSurface);
