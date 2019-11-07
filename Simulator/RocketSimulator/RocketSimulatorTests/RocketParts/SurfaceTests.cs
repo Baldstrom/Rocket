@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RocketSimulator.RocketParts;
+/// <summary>
 /// Module Name: SurfaceTests.cs
 /// Project: RocketSimulator
 /// Nikobotics Software
@@ -71,7 +73,7 @@ namespace RocketSimulator.RocketParts.Tests
 
             Assert.AreEqual(Surface.NUM_VERTICES_MAX, surfaceUnderTest.Vertices.Count);
             Assert.ThrowsException<ArgumentException>(
-                delegate 
+                delegate
                 {
                     surfaceUnderTest.AddVertex(0.0f, 0.0f, 0.0f);
                 });
@@ -94,7 +96,7 @@ namespace RocketSimulator.RocketParts.Tests
             Assert.AreEqual(0.0f, surfaceUnderTest.SurfaceArea, float.Epsilon);
 
             Assert.ThrowsException<NotImplementedException>(
-                delegate 
+                delegate
                 {
                     surfaceUnderTest.FindSurfaceArea(Surface.SurfacePolygonOrder.ThreeVertex);
                 });
@@ -111,6 +113,12 @@ namespace RocketSimulator.RocketParts.Tests
                     // Test some random number as an enumeration
                     surfaceUnderTest.FindSurfaceArea((Surface.SurfacePolygonOrder)0x72);
                 });
+        }
+
+        [TestMethod]
+        public void RayCollidesTest()
+        {
+            Assert.Fail();
         }
 
         /// <summary>

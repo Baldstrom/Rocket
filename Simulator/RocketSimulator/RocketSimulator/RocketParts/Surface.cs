@@ -16,6 +16,7 @@ namespace RocketSimulator.RocketParts
     using System.Text;
     using System.Threading.Tasks;
     using ALPHASim.SimMath;
+    using RocketSimulator.RayTracing;
 
     /// <summary>
     /// Contains structure for defining a simulated 
@@ -139,6 +140,16 @@ namespace RocketSimulator.RocketParts
             TwoVertex,
             ThreeVertex,
             FourVertex,
+        }
+
+        /// <summary>
+        /// Determines if a ray collides with this surface
+        /// </summary>
+        /// <param name="checkRay"> Ray to check. </param>
+        /// <returns> Whether or not the ray hits the surface. </returns>
+        public bool RayCollides(Ray checkRay)
+        {
+            throw new NotImplementedException();
         }
     }
 }
