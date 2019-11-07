@@ -85,5 +85,17 @@ namespace ALPHASim.SimMath
         public static Vector2D<T> operator -(Vector2D<T> a, Vector2D<T> b) { return a.Subtract(b); }
         public static Vector2D<T> operator *(Vector2D<T> a, Vector2D<T> b) { return a.Multiply(b); }
         public static Vector2D<T> operator /(Vector2D<T> a, Vector2D<T> b) { return a.Divide(b); }
+
+        public override bool Equals(object o)
+        {
+            if (o is null) { return false; }
+            try
+            {
+                Vector2D<T> n = (Vector2D<T>)o;
+                return this.X.Equals(n.X) && this.Y.Equals(n.Y);
+            }
+            catch { return false; }
+
+        }
     }
 }

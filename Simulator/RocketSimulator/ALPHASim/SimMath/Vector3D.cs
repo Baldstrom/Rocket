@@ -130,5 +130,16 @@ namespace ALPHASim.SimMath
         public static Vector3D<T> operator -(Vector3D<T> a, Vector3D<T> b) { return a.Subtract(b); }
         public static Vector3D<T> operator *(Vector3D<T> a, Vector3D<T> b) { return a.Multiply(b); }
         public static Vector3D<T> operator /(Vector3D<T> a, Vector3D<T> b) { return a.Divide(b); }
+
+        public override bool Equals(object o)
+        {
+            if (o is null) { return false; }
+            try
+            {
+                Vector3D<T> n = (Vector3D<T>)o;
+                return this.X.Equals(n.X) && this.Y.Equals(n.Y) && this.Z.Equals(n.Z);
+            } catch { return false; }
+
+        }
     }
 }
