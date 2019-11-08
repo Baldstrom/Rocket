@@ -54,6 +54,23 @@ namespace RocketSimulator.RayTracing.Tests
 
             Assert.IsNotNull(rut.Phi);
             Assert.IsNotNull(rut.Theta);
+
+            Vector3D<float> unitVector = new Vector3D<float>(1.0f, 0.0f, 0.0f);
+            Vector3D<float> unitDirection = new Vector3D<float>(-1.0f, 0.0f, 0.0f);
+            Vector3D<float> zeroAnchor = new Vector3D<float>(0.0f, 0.0f, 0.0f);
+
+            rut = new Ray(unitVector, unitDirection);
+
+            float testAngle = 0.0f;
+            float testResolution = 0.2f;
+            
+            while (testAngle < 2 * Math.PI)
+            {
+                rut.RayFromAngleOffset(zeroAnchor, testResolution, 0);
+                Assert.IsTrue(Equals(rut.Position.X, (float) Math.Cos(testAngle)));
+                Assert.IsTrue(Equals(rut.Position.Y, (float) Math.Sin(testAngle)));
+                testAngle += testResolution;
+            }
         }
 
         private Vector3D<float> RandomVectorGenerator(float maxElementSize)

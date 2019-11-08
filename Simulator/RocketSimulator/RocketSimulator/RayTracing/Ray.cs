@@ -29,6 +29,9 @@ namespace RocketSimulator.RayTracing
         /// <summary> Direction of ray. </summary>
         public Vector3D<float> Direction { get; private set; }
 
+        /// <summary> Ray anchor point. Point Direction always points towards. </summary>
+        public Vector3D<float> Anchor { get; private set; }
+
         /// <summary> Angle of position relative to YZ axis. Radians. </summary>
         public float Theta
         {
@@ -75,6 +78,7 @@ namespace RocketSimulator.RayTracing
         {
             this.Position = position;
             this.Direction = direction.Normalize();
+            this.Anchor = this.DetermineAnchor();
         }
 
         /// <summary>
@@ -153,6 +157,16 @@ namespace RocketSimulator.RayTracing
         }
 
         /// <summary>
+        /// Determines the anchor point of the vector given
+        /// a direction and position.
+        /// </summary>
+        /// <returns> Anchor point of the Ray </returns>
+        private Vector3D<float> DetermineAnchor()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Gets the distance between the tips of two vectors.
         /// </summary>
         /// <param name="vector1"> A vector. </param>
@@ -186,6 +200,5 @@ namespace RocketSimulator.RayTracing
         {
             return degrees * (float) Math.PI / 180.0f;
         }
-
     }
 }
