@@ -151,5 +151,16 @@ namespace RocketSimulator.RocketParts
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Will return null if the ray does not collide. Otherwise
+        /// will return a 3D vector of the point where the ray collides.
+        /// </summary>
+        /// <param name="checkRay"> Ray to check for collisions. </param>
+        /// <returns> Point in the plane where the ray collides. </returns>
+        public Vector3D<double> RayCollisionPoint(Ray checkRay)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
