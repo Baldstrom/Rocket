@@ -31,7 +31,26 @@ namespace RocketSimulator.CommandLine
         /// <returns> A list of all CLI actions to be considered during runtime. </returns>
         public List<CLIAction> GetActions(string[] commandLineInput)
         {
-            throw new NotImplementedException();
+            List<CLIAction> actionCalls = new List<CLIAction>();
+            string[] actionMembers = commandLineInput.JoinWith("").Split('-');
+
+            foreach (string actionString in actionMembers)
+            {
+                string[] actionDecomposition = actionString.Split(' ');
+                string operation = actionDecomposition[0];
+
+                switch (operation)
+                {
+                    case "h":
+                    case "help":
+                    case "?":
+                        actionCalls.Add(new CLIAction(CLIActionType.Help));
+                        continue;
+                    default:
+                        break;
+                }
+            }
+            return actionCalls;
         }
 
         /// <summary>

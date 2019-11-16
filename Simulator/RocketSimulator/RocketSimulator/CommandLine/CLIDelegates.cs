@@ -43,7 +43,7 @@ namespace RocketSimulator.CommandLine
             CLIDelegates.AddDelegate(CLIActionType.ArgDebug, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.CSVSetup, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.EnableCSV, EmptyActionDelegate);
-            CLIDelegates.AddDelegate(CLIActionType.Help, EmptyActionDelegate);
+            CLIDelegates.AddDelegate(CLIActionType.Help, HelpActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.LoadSTL, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.Test, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.TimeScale, EmptyActionDelegate);
@@ -58,6 +58,12 @@ namespace RocketSimulator.CommandLine
         /// </summary>
         /// <param name="action"> Action to do nothing with. </param>
         private static void EmptyActionDelegate(CLIAction action) { /* NOP */ }
+
+        public static void HelpActionDelegate(CLIAction action)
+        {
+            // TODO: Change this to use Log class
+            Console.WriteLine(CLIHelp.GetHelpMenu());
+        }
 
         #endregion
 
