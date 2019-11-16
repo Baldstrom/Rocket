@@ -46,6 +46,20 @@ namespace RocketSimulator.CommandLine
                     case "?":
                         actionCalls.Add(new CLIAction(CLIActionType.Help));
                         continue;
+                    case "ts":
+                    case "timescale":
+                        if (ArrayHasNext(actionDecomposition))
+                        {
+                            if (double.TryParse(actionDecomposition[1], out double newTimescale))
+                            {
+                                CLIAction timeScaleAction = new CLIAction(CLIActionType.TimeScale)
+                                {
+                                    ActionValue = newTimescale
+                                };
+                                actionCalls.Add(timeScaleAction);
+                            }
+                        }
+                        continue;
                     default:
                         break;
                 }
@@ -76,6 +90,11 @@ namespace RocketSimulator.CommandLine
         public void AddDelegate(CLIActionType delegateTarget, CLIDelegatePrototype delegateCLI)
         {
             CLIDelegates.AddDelegate(delegateTarget, delegateCLI);
+        }
+
+        private static bool ArrayHasNext(object[] array, int currentIndex = 0)
+        {
+            return (array.Length - 1) > currentIndex;
         }
     }
 }

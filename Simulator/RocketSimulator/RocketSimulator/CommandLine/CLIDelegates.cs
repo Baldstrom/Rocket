@@ -46,7 +46,7 @@ namespace RocketSimulator.CommandLine
             CLIDelegates.AddDelegate(CLIActionType.Help, HelpActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.LoadSTL, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.Test, EmptyActionDelegate);
-            CLIDelegates.AddDelegate(CLIActionType.TimeScale, EmptyActionDelegate);
+            CLIDelegates.AddDelegate(CLIActionType.TimeScale, TimeScaleActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.Writeback, EmptyActionDelegate);
             CLIDelegates.AddDelegate(CLIActionType.WritebackExterior, EmptyActionDelegate);
         }
@@ -63,6 +63,12 @@ namespace RocketSimulator.CommandLine
         {
             // TODO: Change this to use Log class
             Console.WriteLine(CLIHelp.GetHelpMenu());
+        }
+
+        public static void TimeScaleActionDelegate(CLIAction action)
+        {
+            Console.WriteLine("TEST");
+            Console.WriteLine(action.ActionValue.ToString());
         }
 
         #endregion
